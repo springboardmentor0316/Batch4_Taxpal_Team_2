@@ -1,0 +1,174 @@
+
+/* MAIN LAYOUT */
+.verify-page {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* LEFT SIDE */
+.verify-left {
+  flex: 1;
+  background: linear-gradient(180deg, #1b87f3 0%, #0074cc 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.verify-illustration {
+  width: 70%;
+  max-width: 400px;
+  height: auto;
+}
+
+/* RIGHT SIDE */
+.verify-right {
+  flex: 1;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 40px;
+}
+
+.verify-right::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -100px;
+  width: 200px;
+  height: 100%;
+  background-color: #f4f4f4;
+  border-top-left-radius: 200px;
+  border-bottom-left-radius: 200px;
+  z-index: 0;
+}
+
+/* CARD */
+.verify-card {
+  width: 100%;
+  max-width: 380px;
+  background-color: transparent;
+  position: relative;
+  z-index: 1;
+}
+
+/* BACK ICON — clean standalone */
+.back-icon-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.back-icon {
+  font-size: 20px;
+  color: #333;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+  transition: transform 0.2s ease;
+}
+
+.back-icon:hover {
+  transform: translateX(-2px);
+}
+
+/* TITLE & SUBTITLE */
+.verify-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.verify-subtitle {
+  color: #777;
+  font-size: 15px;
+  margin-bottom: 30px;
+}
+
+/* CODE INPUTS */
+.code-inputs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  gap: 12px;
+}
+
+.code-box {
+  width: 65px;
+  height: 65px;
+  text-align: center;
+  font-size: 22px;
+  border-radius: 12px;
+  border: none;
+  background-color: #e9edf2;
+  transition: all 0.2s ease;
+}
+
+.code-box:focus {
+  background-color: #fff;
+  border: 2px solid #0074cc;
+  outline: none;
+  box-shadow: 0 0 6px rgba(0, 116, 204, 0.3);
+}
+
+/* RESEND TEXT */
+.resend-text {
+  font-size: 14px;
+  color: #555;
+  text-align: left;
+  margin-bottom: 24px;
+}
+
+.resend-link {
+  color: #f87171;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* VERIFY BUTTON */
+.verify-btn {
+  width: 100%;
+  background-color: #0074cc;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 15px;
+  font-size: 17px;
+  font-weight: 600;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.verify-btn:hover {
+  background-color: #005fa3;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .verify-page {
+    flex-direction: column;
+  }
+
+  .verify-left {
+    height: 240px;
+  }
+
+  .verify-right::before {
+    display: none;
+  }
+
+  .verify-card {
+    max-width: 90%;
+  }
+
+  .code-box {
+    width: 55px;
+    height: 55px;
+  }
+}

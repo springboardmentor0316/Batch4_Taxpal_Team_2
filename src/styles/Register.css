@@ -1,0 +1,177 @@
+/* MAIN LAYOUT */
+.register-page {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* LEFT PANEL */
+.register-left {
+  flex: 1;
+  background-color: #0074cc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.register-illustration {
+  width: 70%;
+  max-width: 420px;
+  height: auto;
+  object-fit: contain;
+}
+/* Right white form section */
+.register-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  padding: 40px;
+}
+
+/* Card */
+.register-card {
+  width: 100%;
+  max-width: 380px;
+}
+
+.register-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.register-subtitle {
+  text-align: center;
+  color: #777;
+  font-size: 14px;
+  margin-bottom: 32px;
+}
+
+/* Form fields */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+/* Input + icons */
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-icon .input-icon {
+  position: absolute;
+  left: 12px;
+  color: #999;
+  font-size: 15px;
+}
+
+.input-with-icon .toggle-icon {
+  position: absolute;
+  right: 12px;
+  color: #999;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.input-with-icon input {
+  width: 100%;
+  padding: 12px 38px;
+  border-radius: 8px;
+  border: 1px solid #d0d0d0;
+  font-size: 14px;
+  background-color: #eef0f2;
+  transition: 0.3s;
+}
+
+.input-with-icon input:focus {
+  outline: none;
+  background-color: #fff;
+  border-color: #0074cc;
+}
+
+/* Select dropdowns */
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.half {
+  flex: 1;
+}
+
+select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #d0d0d0;
+  font-size: 14px;
+  background-color: #eef0f2;
+  color: #555;
+}
+
+/* Button */
+.register-btn {
+  width: 100%;
+  background-color: #0074cc;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.register-btn:hover {
+  background-color: #005fa3;
+}
+
+/* Login text */
+.login-text {
+  text-align: center;
+  font-size: 13px;
+  color: #555;
+  margin-top: 14px;
+}
+
+.login-link {
+  color: #0074cc;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .register-page {
+    flex-direction: column;
+  }
+
+  .register-left {
+    height: 200px;
+  }
+
+  .register-card {
+    max-width: 90%;
+  }
+}
