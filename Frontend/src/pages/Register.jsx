@@ -26,39 +26,40 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validation checks
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      toast.error("Passwords do not match!");
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      toast.error("Password must be at least 6 characters long");
       return;
     }
 
     setLoading(true);
-
     try {
-      const res = await fetch("http://localhost:5000/api/auth/register", {
+      const response = await fetch("http://localhost:5000/api/auth/register", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
-          country: formData.country,
-          incomeBracket: formData.incomeBracket,
-        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
       });
 
-      const data = await res.json();
-      setLoading(false);
+      const data = await response.json();
 
-      if (!res.ok) {
-        alert(data.message || "Registration failed");
+      if (!response.ok) {
+        toast.error(data.message || "Registration failed");
+        setLoading(false);
         return;
       }
 
-      alert("✅ Registration successful! You can now log in.");
-      navigate("/login"); // pass email to verify page
-    } catch (err) {
-      console.error("Registration error:", err);
-      alert("Something went wrong. Please try again.");
+      toast.success("Registration successful! Please login.");
+      navigate("/login");
+    } catch (error) {
+      console.error("Registration error:", error);
+      toast.error("Something went wrong. Please try again.");
       setLoading(false);
     }
   };

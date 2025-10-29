@@ -29,19 +29,18 @@ const Verification = () => {
     const fullCode = code.join("");
 
     if (fullCode.length !== 4) {
-      alert("Please enter all 4 digits");
+      toast.error("Please enter all 4 digits");
       return;
     }
 
     if (!email) {
-      alert("Missing email. Please go back to Forgot Password.");
+      toast.error("Missing email. Please go back to Forgot Password.");
       navigate("/forgot-password");
       return;
     }
 
     setLoading(true);
     try {
-      // ✅ Updated endpoint
       const res = await fetch("http://localhost:5000/api/auth/verify-reset-code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -52,16 +51,16 @@ const Verification = () => {
       setLoading(false);
 
       if (!res.ok) {
-        alert(data.message || "Verification failed.");
+        toast.error(data.message || "Verification failed.");
         return;
       }
 
-      alert("✅ Code verified successfully!");
+      toast.success("Code verified successfully!");
       navigate("/reset-password", { state: { email, code: fullCode } });
 
     } catch (err) {
       console.error("Verification error:", err);
-      alert("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.");
       setLoading(false);
     }
   };
@@ -69,13 +68,12 @@ const Verification = () => {
   // ✅ Resend Code
   const handleResend = async () => {
     if (!email) {
-      alert("Missing email. Please go back to Forgot Password.");
+      toast.error("Missing email. Please go back to Forgot Password.");
       return;
     }
 
     setResending(true);
     try {
-      // ✅ Updated endpoint for resending
       const res = await fetch("http://localhost:5000/api/auth/resend-reset-code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -86,14 +84,14 @@ const Verification = () => {
       setResending(false);
 
       if (!res.ok) {
-        alert(data.message || "Failed to resend code.");
+        toast.error(data.message || "Failed to resend code.");
         return;
       }
 
-      alert("📩 A new verification code has been sent to your email!");
+      toast.success("A new verification code has been sent to your email!");
     } catch (err) {
       console.error("Resend error:", err);
-      alert("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.");
       setResending(false);
     }
   };

@@ -26,19 +26,20 @@ const Login = () => {
       setLoading(false);
 
       if (!res.ok) {
-        alert(data.message || "Login failed");
+        toast.error(data.message || "Login failed");
         return;
       }
 
-      // ✅ Save JWT + User info in localStorage
+      // Save JWT + User info in localStorage
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-
-      alert("Login successful!");
-      navigate("/dashboard"); // redirect to dashboard after login
+      
+      toast.success("Login successful!");
+      navigate("/");
+      
     } catch (err) {
       console.error("Login error:", err);
-      alert("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.");
       setLoading(false);
     }
   };

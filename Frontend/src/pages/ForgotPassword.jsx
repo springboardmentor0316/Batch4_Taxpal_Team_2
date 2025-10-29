@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 import { FaEnvelope, FaArrowLeft } from "react-icons/fa";
 import "../styles/ForgotPassword.css";
-import { toast } from "react-toastify";
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -12,7 +12,7 @@ const ForgotPassword = () => {
     e.preventDefault();
 
     if (!email) {
-      alert("Please enter your email.");
+      toast.error("Please enter your email.");
       return;
     }
 
@@ -28,17 +28,17 @@ const ForgotPassword = () => {
       setLoading(false);
 
       if (!res.ok) {
-        alert(data.message || "Error sending verification code.");
+        toast.error(data.message || "Error sending verification code.");
         return;
       }
 
-      alert("✅ Verification code sent to your email!");
+      toast.success("Verification code sent to your email!");
       // Pass email to verification page
       navigate("/verification", { state: { email } });
     } catch (err) {
       console.error("Forgot password error:", err);
       setLoading(false);
-      alert("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.");
     }
   };
 

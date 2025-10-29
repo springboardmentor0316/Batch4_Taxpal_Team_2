@@ -21,17 +21,17 @@ const ResetPassword = () => {
     e.preventDefault();
 
     if (password.length < 6) {
-      alert("Password must be at least 6 characters long.");
+      toast.error("Password must be at least 6 characters long.");
       return;
     }
 
     if (password !== confirm) {
-      alert("Passwords do not match!");
+      toast.error("Passwords do not match!");
       return;
     }
 
     if (!email || !code) {
-      alert("Missing verification details. Please verify again.");
+      toast.error("Missing verification details. Please verify again.");
       navigate("/forgot-password");
       return;
     }
@@ -48,17 +48,15 @@ const ResetPassword = () => {
       setLoading(false);
 
       if (!res.ok) {
-        alert(data.message || "Password reset failed.");
+        toast.error(data.message || "Password reset failed.");
         return;
       }
 
-      toast.success("✅ Password updated successfully!");
-
+      toast.success("Password updated successfully!");
       navigate("/login");
     } catch (err) {
       console.error("Reset password error:", err);
-      toast.error("❌ Something went wrong!");
-
+      toast.error("Something went wrong. Please try again.");
       setLoading(false);
     }
   };
