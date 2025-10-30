@@ -1,14 +1,20 @@
 import React from "react";
+import { Routes, Route } from "react-router-dom";
 import './App.css'
 import Sidebar from "./Sidebar";
 import Home from "./Home";
+import Setting from"./setting";
 
 export default function App() {
   return (
     <div className="app-grid">
       <Sidebar />
       <main className="main-area">
-        <Home />
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/setting" element={<Setting />} />
+            <Route path="*" element={<div style={{padding:20}}>Page not found</div>} />
+        </Routes>
       </main>
     </div>
   );
