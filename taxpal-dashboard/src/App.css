@@ -28,9 +28,27 @@ body, html, #root {height:100%; margin:0; background:var(--page-bg);}
 .logo img { width:44px; height:44px; border-radius:6px; }
 .app-name { display:flex; gap:8px; align-items:center; margin-top:8px; font-weight:700; }
 .tp { background:#0b3b5a; padding:6px; border-radius:6px; display:inline-block; font-weight:700; }
-.nav { margin-top:px; display:flex; flex-direction:column; gap:8px; }
-.nav-item {
-  background:transparent;
+
+.sidebar-list {
+  padding: 0;
+  list-style-type: none;
+}
+
+.sidebar-list-item {
+  padding: 20px 20px 20px 20px;
+  font-size: 18px;
+  
+}
+
+.sidebar-list-item:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+}
+
+.sidebar-list-item > a {
+  text-decoration: none;
+  color: #9e9ea4;
+   background:transparent;
   color:#e9f6fe;
   border:none;
   text-align:left;
@@ -39,17 +57,14 @@ body, html, #root {height:100%; margin:0; background:var(--page-bg);}
   display:flex; gap:10px; align-items:center;
   cursor:pointer;
 }
-.nav-item span { font-size:15px; }
-.nav-item.active { background: rgba(255,255,255,0.12); }
-.sidebar-bottom { padding-top:12px; border-top:1px solid rgba(255,255,255,0.06); }
+.sidebar-list-item.active { background: rgba(255,255,255,0.12); }
 .profile { display:flex; gap:12px; align-items:center; color:#cfeffb; padding-top:12px; }
 .avatar { width:40px; height:40px; background:#063b59; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; }
 
 /* main area */
 .main-area { padding: 18px 28px; }
 
-/* Home layout */
-.home-container { max-width: 1200px; margin: 0 auto; }
+
 
 .dashboard-header { display:flex; justify-content:space-between; align-items:center; gap:20px; }
 .dashboard-header h2 { margin:0; }

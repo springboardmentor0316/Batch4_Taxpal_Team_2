@@ -33,7 +33,7 @@ export default function Home() {
   const COLORS = ["#3B82F6", "#10B981", "#F59E0B"];
 
   return (
-    <div className="home-container">
+    <div>
       <header className="dashboard-header">
         <div>
           <h2>Financial Dashboard</h2>
@@ -138,6 +138,6 @@ export default function Home() {
 </div>
 
       </section>
-    </div>
+      </div>
   );
 }

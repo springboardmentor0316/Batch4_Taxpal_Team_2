@@ -4,22 +4,41 @@ import { FaTachometerAlt, FaExchangeAlt, FaRegChartBar, FaFileInvoiceDollar, FaF
 export default function Sidebar() {
   return (
     <aside className="sidebar">
-      <div className="sidebar-top">
         <div className="logo">
                <div className="app-name">
-          <img src="public/logo.png" alt="TaxPal" />
-     
-          <span>TaxPal</span>
+          <img src="./logo.png" alt="TaxPal" />
+           <h1>TaxPal</h1>
         </div>
-        </div>
-      </div>
+      {/* </div> */}
 
-        <button className="nav-item active"><FaTachometerAlt /> <span>Dashboard</span></button>
-        <button className="nav-item"><FaExchangeAlt /> <span>Transactions</span></button>
-        <button className="nav-item"><FaRegChartBar /> <span>Budgets</span></button>
-        <button className="nav-item"><FaFileInvoiceDollar /> <span>Tax Estimator</span></button>
-        <button className="nav-item"><FaFolderOpen /> <span>Reports</span></button>
-
+        <ul className ="sidebar-list">
+                    <li className ="sidebar-list-item active ">
+                        <a href = "">
+                           <FaTachometerAlt /> Dashboard
+                        </a>
+                    </li>
+                    <li className ="sidebar-list-item">
+                        <a href = "">
+                           <FaExchangeAlt /> Transactions
+                        </a>
+                    </li>
+                    <li className ="sidebar-list-item">
+                        <a href = "">
+                           <FaRegChartBar /> Budgets
+                        </a>
+                    </li>
+                    <li className ="sidebar-list-item">
+                        <a href = "">
+                           <FaFileInvoiceDollar /> Tax Estimator
+                        </a>
+                    </li>
+                    <li className ="sidebar-list-item">
+                        <a href = "">
+                           <FaFolderOpen />Reports
+                        </a>
+                    </li>
+                </ul>
+                </div>
 
       <div className="sidebar-bottom">
         <div className="profile">
