@@ -1,23 +1,24 @@
 import React, { useState } from "react";
-import "../styles/EditBudget.css";
+import "./styles/EditBudget.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
-const CreateBudget = ({ onClose }) => {
+
+const EditBudget = ({ onClose }) => {
   const [category, setCategory] = useState("Food");
-  const [amount, setAmount] = useState("");
-  const [month, setMonth] = useState("");
-  const [description, setDescription] = useState("");
+  const [amount, setAmount] = useState(500);
+  const [month, setMonth] = useState("May 2025");
+  const [description, setDescription] = useState("Monthly grocery and dining budget");
 
   return (
     <div className="modal-overlay">
       <div className="edit-modal">
         <div className="edit-modal-header">
-          <h3>Create Budget</h3>
+          <h3>Edit Budget</h3>
           <FontAwesomeIcon icon={faXmark} className="close-icon" onClick={onClose} />
         </div>
 
-        <p className="subtext">Enter new budget details</p>
+        <p className="subtext">Update your budget details</p>
 
         <div className="form-grid">
           <div className="form-group">
@@ -43,30 +44,31 @@ const CreateBudget = ({ onClose }) => {
             </div>
           </div>
         </div>
-
-       <div className="form-group month">
+        <div className="form-group month">
         <label>Month</label>
             <div className="input-wrapper">
              <input type="month" value={month} onChange={(e) => setMonth(e.target.value)}/>
             </div>
         </div>
-
         <div className="form-group description">
           <label>Description (Optional)</label>
           <textarea
             rows="2"
+            columns="10"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
         </div>
 
         <div className="button-row">
-          <button className="cancel-btn" onClick={onClose}>Cancel</button>
-          <button className="update-btn">Create Budget</button>
+          <button className="cancel-btn" onClick={onClose}>
+            Cancel
+          </button>
+          <button className="update-btn">Update Budget</button>
         </div>
       </div>
     </div>
   );
 };
 
-export default CreateBudget;
+export default EditBudget;

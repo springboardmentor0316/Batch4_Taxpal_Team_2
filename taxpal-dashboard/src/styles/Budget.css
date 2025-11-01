@@ -5,56 +5,7 @@
   color: #333;
 }
 
-.sidebar {
-  width: 250px;
-  background: #0b6efd;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 20px 20px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-}
 
-.sidebar .logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 22px;
-  font-weight: bold;
-
-  margin-bottom: 15px;
-}
-.sidebar .logo .logo_tp{
-  border-radius: 30px;
-  height:50px;
-  width:50px;
-}
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  flex-grow: 1;
-}
-
-.sidebar ul li {
-  padding: 12px 15px;
-  margin-bottom: 8px;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 15px;
-}
-
-.sidebar ul li.active,
-.sidebar ul li:hover {
-  background: #0a58ca;
-}
 
 .settings {
   font-size: 14px;
@@ -100,7 +51,6 @@
 
 .main-content {
   flex: 1;                
-  margin-left: 250px;   
   padding: 20px;
   background: #f9fafb;
   min-height: 100vh;
@@ -149,7 +99,7 @@
 }
 
 .card {
-  flex: 1;
+
   min-width: 300px;       
   padding: 30px 25px;   
   border-radius: 12px;

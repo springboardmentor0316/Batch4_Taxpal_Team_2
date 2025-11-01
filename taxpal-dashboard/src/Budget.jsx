@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faFileAlt, faHouse, faSquarePlus, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
-import "../styles/Budget.css";
-import { FaCalculator, FaGear, FaRightFromBracket, FaCircleHalfStroke } from "react-icons/fa6";
+import { faEdit,  faTrashAlt } from '@fortawesome/free-regular-svg-icons';
+import "./styles/Budget.css";
 import EditBudget from "./EditBudget";
 import CreateBudget from "./CreateBudget";
-import Logo from "../assets/TaxPal_logo.png";
-import ProfileImg from "../assets/profile.jpeg";
+
 
 
 const Budget = () => {
@@ -34,34 +32,7 @@ const Budget = () => {
   return (
     <>
       <div className={`budget-container ${(isEditOpen || isCreateOpen) ? "blurred" : ""}`}>
-        <aside className="sidebar">
-          <div>
-            <div className="logo">
-            <img src={Logo} alt="logo" className="logo_tp" />
-              <h2>TaxPal</h2>
-            </div>
-            <ul>
-              <li><FontAwesomeIcon icon={faHouse} /> Dashboard</li>
-              <li><FontAwesomeIcon icon={faSquarePlus} /> Transactions</li>
-              <li className="active"><FaCircleHalfStroke style={{ color: "white" }} /> Budgets</li>
-              <li><FaCalculator style={{color: "white"}} /> Tax Estimator</li>
-              <li><FontAwesomeIcon icon={faFileAlt} /> Reports</li>
-            </ul>
-          </div>
-          <div>
-            <div className="profile">
-                <img src={ProfileImg} alt="Profile" />
-              <div className="profile-info">
-                <strong>John Doe</strong>
-                <small>johndoe@gmail.com</small>
-              </div>
-            </div>
-            <div className="settings">
-              <p>Settings <FaGear style={{color:"white" }} /></p>
-              <p>Logout <FaRightFromBracket style={{ marginLeft: "2px" }} /></p>
-            </div>
-          </div>
-        </aside>
+
 
         <main className="main-content">
           <div className="header">

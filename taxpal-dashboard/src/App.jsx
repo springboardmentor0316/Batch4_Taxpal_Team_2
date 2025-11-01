@@ -1,29 +1,23 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import './App.css';
+import { Routes, Route } from "react-router-dom";
+import './App.css'
 import Sidebar from "./Sidebar";
 import Home from "./Home";
-import Budget from "./pages/Budget";
-import CreateBudget from "./pages/CreateBudget";
-import EditBudget from "./pages/EditBudget";
+import Setting from"./settings";
+import Budget from "./Budget";
 
 export default function App() {
   return (
-    <Router>
-      <div className="app-grid">
-        <Sidebar />
-        <main className="main-area">
-          <Routes>
-            {/* Home page */}
+    <div className="app-grid">
+      <Sidebar />
+      <main className="main-area">
+        <Routes>
             <Route path="/" element={<Home />} />
-
-            {/* Budget pages */}
-            <Route path="/budget" element={<Budget />} />
-            <Route path="/budget/create" element={<CreateBudget />} />
-            <Route path="/budget/edit/:id" element={<EditBudget />} />
-          </Routes>
-        </main>
-      </div>
-    </Router>
+            <Route path="/setting" element={<Setting />} />
+            <Route path="/Budget" element={<Budget />} />
+            {/* <Route path="*" element={<div style={{padding:20}}>Page not found</div>} /> */}
+        </Routes>
+      </main>
+    </div>
   );
 }
