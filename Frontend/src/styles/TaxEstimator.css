@@ -1,0 +1,158 @@
+.tax-estimator-container {
+  padding: 40px;
+  font-family: "Poppins", sans-serif;
+  color: #1a1a1a;
+  background: #f9fafc;
+  min-height: 100vh;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.page-header .title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1b3b7d;
+}
+
+.page-header .subtitle {
+  color: #666;
+  margin-top: 4px;
+  font-size: 1rem;
+}
+
+/* ---------- Grid Layout ---------- */
+.content-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  align-items: start;
+}
+
+.calculator-card,
+.summary-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  padding: 30px;
+}
+
+/* ---------- Headings ---------- */
+.section-heading {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #1b3b7d;
+}
+
+.sub-heading {
+  margin-top: 25px;
+  font-size: 1.1rem;
+  color: #1b3b7d;
+  font-weight: 500;
+}
+
+/* ---------- Form Elements ---------- */
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #fafafa;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #1b3b7d;
+  background: #fff;
+}
+
+/* ---------- Button ---------- */
+.btn-calculate {
+  margin-top: 25px;
+  background: #1b3b7d;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.25s ease;
+  width: 100%;
+}
+
+.btn-calculate:hover {
+  background: #2a4da3;
+}
+
+/* ---------- Summary Card ---------- */
+.summary-card {
+  text-align: center;
+}
+
+.placeholder-content {
+  padding: 40px 0;
+  color: #777;
+}
+
+.calculator-icon {
+  font-size: 3rem;
+  color: #1b3b7d;
+  margin-bottom: 10px;
+}
+
+.result-display {
+  padding: 40px 0;
+}
+
+.summary-text {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.tax-value {
+  font-size: 2rem;
+  color: #1b3b7d;
+  font-weight: 600;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .calculator-card,
+  .summary-card {
+    width: 100%;
+  }
+}
