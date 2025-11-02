@@ -323,6 +323,147 @@ td {
   color: #6b7280;
   margin-top: 4px;
 }
+/* --- Updated Styles for Modal and Header --- */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  /* Retain your existing overlay */
+  background: rgba(0,0,0,0.18); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+/* --- Reverting/Updating Modal Structure Styles --- */
+
+/* Keeping the overall modal look from the previous request */
+.modal-container {
+  background: #ffffff;
+  border-radius: 8px;
+  /* Slightly wider to accommodate side-by-side fields */
+  width: 600px; 
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* New: Container for the main title and X button */
+.modal-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 0; /* Adjusted since the sub text is next */
+}
+
+/* --- Inner Form Card Styling (to group the content) --- */
+
+.inner-form-card {
+  /* This creates the inner white box seen in the screenshot */
+  background: #ffffff; 
+  border-radius: 8px;
+  border: 1px solid #eee; /* Subtle border */
+  padding: 16px 20px;
+  margin-top: 16px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Very light shadow */
+}
+
+.inner-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.inner-card-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.mobile-icon-box {
+  /* Style for the small icon (using 📱 here) */
+  background-color: #f0f0f0;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* --- Two-Column Form Layout Styles --- */
+
+.form-row {
+  display: flex;
+  gap: 20px; /* Space between the two columns */
+  margin-bottom: 16px; /* Space below the row */
+}
+
+.form-group.half {
+  /* Takes exactly half the space in the form-row */
+  flex: 1; 
+  /* Resetting margin for groups within a row */
+  margin-bottom: 0; 
+}
+
+.form-group.full {
+  margin-bottom: 16px;
+}
+
+/* Date input specific styles to align the calendar icon */
+.date-input-container {
+  position: relative;
+}
+
+.date-input-container input {
+  /* Add padding to the right to make space for the icon */
+  padding-right: 30px; 
+}
+
+.calendar-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 14px;
+  pointer-events: none; /* Prevents the icon from capturing clicks */
+}
+
+
+/* --- Button Actions Styles --- */
+
+.modal-actions-inline {
+  display: flex;
+  justify-content: flex-end; /* Align buttons to the right */
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 16px;
+  border-top: 1px solid #eee; /* A separator line above the buttons */
+}
+
+/* Keeping button styles similar to the previous request for consistency */
+.btn-cancel {
+  background: none;
+  border: none; /* Cancel button in the screenshot is borderless */
+  color: #555;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.btn-save {
+  background-color: #007bff; 
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+}
 
 
 
@@ -361,7 +502,9 @@ td {
   font-size: 20px; }
 
 /* card */
-.card { background:var(--card-bg); border-radius:12px; padding:18px; box-shadow: 0 6px 18px rgba(15,23,42,0.06); margin-top:14px; }
+.card { bac.modal-overlay {
+  position: fixed;
+  insekground:var(--card-bg); border-radius:12px; padding:18px; box-shadow: 0 6px 18px rgba(15,23,42,0.06); margin-top:14px; }
 
 /* tabs */
 .tabs { display:flex; gap:10px; margin-bottom:28px; }
