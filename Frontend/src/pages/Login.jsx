@@ -35,7 +35,7 @@ const Login = () => {
       localStorage.setItem("user", JSON.stringify(data.user));
       
       toast.success("Login successful!");
-      navigate("/");
+      navigate("/Dashboard");
       
     } catch (err) {
       console.error("Login error:", err);
