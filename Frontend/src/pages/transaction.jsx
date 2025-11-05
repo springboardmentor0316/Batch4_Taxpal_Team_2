@@ -1,5 +1,5 @@
 import React from "react";
-
+import "../styles/Transactions.css"
 function Transactions() {
   const transactions = [
     { date: "May 8, 2025", description: "Design Project", category: "Consulting", amount: "+$1200.00", type: "Income" },
@@ -14,7 +14,7 @@ function Transactions() {
         <div className="card">
           <div className="header">
             <h3>Recent Transactions</h3>
-            <a href="#">View All</a>
+            <a href= "#" >View All</a>
           </div>
 
           <table>

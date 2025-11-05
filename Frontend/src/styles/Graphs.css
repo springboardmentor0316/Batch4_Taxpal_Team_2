@@ -1,0 +1,35 @@
+.period-buttons {
+  display: flex;
+  gap: 8px;
+  margin-bottom:20px;
+}
+
+.period {
+  padding: 6px 18px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid #d1d5db;
+  border-radius: 9999px; /* pill shape */
+  background-color: #f9fafb;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.period:hover {
+  background-color: #e5e7eb;
+}
+
+.period.active {
+  background-color: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+}
+.charts-row{
+    display:flex;
+    align-items:center;
+    background-color:white;
+    border-radius:20px;
+    height:540px;
+}

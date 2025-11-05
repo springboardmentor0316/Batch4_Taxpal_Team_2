@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { 
   FaTachometerAlt, 
@@ -22,6 +22,20 @@ const items = [
 ];
 
 export default function Sidebar() {
+  const [user, setUser] = useState({ name: "", email: "" });
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    window.location.href = "/"; // redirect to login page
+  };
+
   return (
     <aside className="sidebar">
       {/* Logo Section */}
@@ -49,19 +63,19 @@ export default function Sidebar() {
         </ul>
       </nav>
       
-      {/* Profile / Settings Section at the Bottom */}
+      {/* Profile / Settings Section */}
       <div className="sidebar-bottom">
         <div className="profile">
-          <img src="/assets/images/TaxPal_logo.png" alt="TaxPal Logo" className="avathar" />
-
+          <img src="/assets/images/profile.jpeg" alt="Profile" className="avathar" />
           <div className="profile-info">
-            <div className="profile-name">TaxPal</div>
+            <div className="profile-name">{user.name || "User"}</div>
+            <div className="profile-email">{user.email || "user@example.com"}</div>
             <div className="profile-actions">
               <NavLink to="/setting" className="settings-link">
                 <FaCog className="settings-icon"/>
                 Settings
               </NavLink>
-              <button className="logout-link">
+              <button className="logout-link" onClick={handleLogout}>
                 <FaSignOutAlt className="logout-icon"/>
                 Logout
               </button>

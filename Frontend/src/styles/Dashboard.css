@@ -1,5 +1,5 @@
 /* ================================================= */
-/* Dashboard.css - Updated for Sidebar Integration   */
+/* Dashboard.css - Integrated with Sidebar Layout    */
 /* ================================================= */
 
 :root {
@@ -18,7 +18,7 @@
 /* ================================================= */
 
 .dashboard-container {
-  margin-left: 260px; /* matches sidebar width */
+  margin-left: 260px; /* Matches fixed Sidebar width */
   padding: 32px;
   background-color: var(--bg-light);
   min-height: 100vh;
@@ -27,9 +27,10 @@
   width: calc(100% - 260px);
   box-sizing: border-box;
   transition: margin-left 0.3s ease;
+  overflow-x: hidden;
 }
 
-/* For mobile when sidebar is hidden */
+/* For smaller screens (when sidebar collapses) */
 @media (max-width: 992px) {
   .dashboard-container {
     margin-left: 0;
@@ -49,12 +50,65 @@
   flex-wrap: wrap;
 }
 
-.header-left h2 {
+.dashboard-header h2 {
   font-size: 28px;
   font-weight: 700;
   color: #1a1a1a;
-  margin-bottom: 4px;
+  margin-bottom: 4px;    background-color: rgba(255, 255, 255, 0.15);
+    color: #000000ff;
 }
+
+.icon {
+    margin-right: 14px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    min-width: 18px;
+}
+
+/* Active Link Style (Light blue/white block) */
+.nav-link.active {
+    background-color: rgba(255, 255, 255, 0.25);
+    color: #fff;
+    border-left-color: transparent; /* No strong left border line */
+    font-weight: 600;
+}
+
+/* ================================================= */
+/* Bottom Profile/Settings Area */
+/* ================================================= */
+
+.sidebar-bottom {
+    padding: 16px;
+    /* background-color: rgba(166, 188, 236, 0.2); */
+    background: linear-gradient(180deg, #1890ff 0%, #4889d8ff 100%); 
+    margin-top: auto;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: rgba(4, 86, 163, 0.3);
+    padding: 12px;
+    border-radius: 10px;
+    transition: background-color 0.3s;
+}
+
+.profile:hover {
+    background-color: rgba(0, 0, 0, 0.45);
+}
+
+/* 💡 CORRECTED CLASS NAME: Changed .avathar to .avatar */
+.avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
 
 .dashboard-header .subtitle {
   font-size: 14px;
@@ -128,35 +182,10 @@
   transform: translateY(-2px);
 }
 
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 10px;
-}
-
 .card-title {
   font-size: 14px;
   color: #6b7280;
   font-weight: 500;
-}
-
-.card-icon {
-  font-size: 24px;
-  opacity: 0.9;
-}
-
-.income-icon {
-  color: #10b981;
-}
-.expense-icon {
-  color: #ef4444;
-}
-.bill-icon {
-  color: #f59e0b;
-}
-.savings-icon {
-  color: #8b5cf6;
 }
 
 .card-value {
@@ -171,27 +200,13 @@
   font-size: 13px;
   font-weight: 500;
   margin-top: 8px;
-}
-
-.trend-up {
-  color: #10b981;
-}
-.trend-down {
-  color: #ef4444;
-}
-.neutral {
   color: #6b7280;
 }
 
 /* ================================================= */
-/* Charts & Data Tables                              */
+/* Charts & Transactions Section                     */
 /* ================================================= */
 
-.charts-and-data {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 20px;
-}
 
 .graphs-container,
 .transactions-container {
@@ -206,55 +221,6 @@
 .graphs-container:hover,
 .transactions-container:hover {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-/* ================================================= */
-/* Chart Header + Filters                            */
-/* ================================================= */
-
-.chart-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 2px solid #f3f4f6;
-}
-
-.chart-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #1f2937;
-}
-
-.time-filters {
-  display: flex;
-  gap: 6px;
-  background-color: #f3f4f6;
-  padding: 4px;
-  border-radius: 8px;
-}
-
-.time-btn {
-  padding: 6px 14px;
-  border: none;
-  background: transparent;
-  color: #6b7280;
-  font-size: 13px;
-  font-weight: 500;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.time-btn:hover {
-  background-color: #e5e7eb;
-  color: #374151;
-}
-
-.time-btn.active {
-  background-color: var(--primary-color);
-  color: white;
 }
 
 /* ================================================= */
@@ -293,26 +259,5 @@
   .cards-row {
     grid-template-columns: 1fr;
     gap: 16px;
-  }
-
-  .chart-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .time-filters {
-    width: 100%;
-    justify-content: space-between;
-  }
-}
-
-@media (max-width: 480px) {
-  .header-left h2 {
-    font-size: 22px;
-  }
-
-  .card-value {
-    font-size: 26px;
   }
 }

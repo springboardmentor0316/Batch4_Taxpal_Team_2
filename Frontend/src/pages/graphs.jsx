@@ -1,5 +1,5 @@
-
 import React from "react";
+import "../styles/Graphs.css";
 import {
   BarChart,
   Bar,
@@ -14,8 +14,8 @@ import {
   Cell,
 } from "recharts";
 
-function Graphs(){
-     const barData = [
+function Graphs() {
+  const barData = [
     { name: "Jan", uv: 4000, pv: 2400 },
     { name: "Feb", uv: 3000, pv: 1398 },
     { name: "Mar", uv: 6000, pv: 6000 },
@@ -33,75 +33,77 @@ function Graphs(){
 
   const COLORS = ["#3B82F6", "#10B981", "#F59E0B"];
 
-    return(
-        <section className="charts-row">
-                <div className="chart-panel">
-                  <div className="panel-header">
-                    <h4>Income vs Expenses</h4>
-                    <div className="period-buttons">
-                      <button className="period">Year</button>
-                      <button className="period">Quarter</button>
-                      <button className="period active">Month</button>
-                    </div>
-                  </div>
-                  <div className="panel-body">
-                    <ResponsiveContainer width="100%" height={320}>
-                      <BarChart data={barData} margin={{ top: 8, right: 12, left: 0, bottom: 8 }}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey="uv" fill="#10B981" name="Income" />
-                        <Bar dataKey="pv" fill="#EF4444" name="Expenses" />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-        
-                {/* Pie chart panel */}
-        <div className="chart-panel pie-panel">
-          <div className="panel-header">
-            <h4>Expense Breakdown</h4>
-          </div>
-        
-          <div className="panel-body">
-            {/* Recharts PieChart as before (ResponsiveContainer/PieChart) */}
-            <ResponsiveContainer width="100%" height={320}>
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  innerRadius={70}
-                  outerRadius={110}
-                  dataKey="value"
-                  labelLine={false}
-                  label={({  percent }) => `${(percent * 100).toFixed(0)}%`}
-                >
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-        
-            {/* Legend / text below */}
-            <div className="pie-legend">
-              <strong>Breakdown</strong>
-              <ul>
-                {pieData.map((d, i) => (
-                  <li key={d.name}>
-                    <span className="legend-dot" style={{ background: COLORS[i % COLORS.length] }} />
-                    <span>{d.name} — {d.value}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+  return (
+    <section className="charts-row" style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+      {/* Bar Chart */}
+      <div className="chart-panel" style={{ flex: 1, minWidth: "300px",marginLeft:"20px"  }}>
+        <div className="panel-header" >
+          <h4>Income vs Expenses</h4>
+          <div className="period-buttons" style={{ display: "flex", gap: "8px" }}>
+            <button className="period">Year</button>
+            <button className="period">Quarter</button>
+            <button className="period active">Month</button>
           </div>
         </div>
-        </section>
+        <div className="panel-body" style={{ height: "320px" }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={barData} margin={{ top: 8, right: 12, left: 0, bottom: 8 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="uv" fill="#10B981" name="Income" />
+              <Bar dataKey="pv" fill="#EF4444" name="Expenses" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
 
-    );
+      {/* Pie Chart */}
+      <div className="chart-panel" style={{ flex: 1, minWidth: "300px" }}>
+        <div className="panel-header">
+          <h4>Expense Breakdown</h4>
+        </div>
+        <div className="panel-body" style={{ height: "250px" }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={pieData}
+                innerRadius={70}
+                outerRadius={110}
+                dataKey="value"
+                labelLine={false}
+                label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+              >
+                {pieData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+
+          <div className="pie-legend" style={{ marginTop: "5px" }}>
+            <ul style={{ listStyle: "none", padding: 0 }}>
+              {pieData.map((d, i) => (
+                <li key={d.name} style={{ display: "flex",marginTop:"10px", alignItems: "center", gap: "6px" }}>
+                  <span style={{
+                    display: "inline-block",
+                    width: "12px",
+                    height: "12px",
+                    borderRadius: "50%",
+                    background: COLORS[i % COLORS.length],
+                  }} />
+                  <span>{d.name} — {d.value}%</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 export default Graphs;

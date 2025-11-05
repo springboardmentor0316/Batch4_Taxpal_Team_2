@@ -100,13 +100,15 @@
 
 .card {
 
-  min-width: 300px;       
+  min-width: 250px;       
   padding: 30px 25px;   
+  background-color:#f8fafcff ;
   border-radius: 12px;
-  background: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
-
+.card:hover{
+  background-color:  #a0b2ffff;
+}
 
 .card h3 {
   font-size: 16px;
@@ -140,7 +142,7 @@ table {
 th, td {
   padding: 14px 12px;
   text-align: left;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid  #eee ;
   vertical-align: middle;
 }
 
@@ -228,4 +230,13 @@ td small {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
+}
+.budget-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.main-content {
+  overflow-x: hidden;
 }
