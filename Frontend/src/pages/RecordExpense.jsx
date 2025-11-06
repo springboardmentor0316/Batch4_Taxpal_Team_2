@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "../styles/RecordsIE.css";
 
 export default function RecordExpense({ onClose, onSaveSuccess }) {
   const [description, setDescription] = useState("");
@@ -10,13 +11,11 @@ export default function RecordExpense({ onClose, onSaveSuccess }) {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    const scrollY = window.scrollY;
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}px`;
+    // Prevent body scroll without affecting layout
+    document.body.style.overflow = "hidden";
+    
     return () => {
-      document.body.style.position = "";
-      document.body.style.top = "";
-      window.scrollTo(0, scrollY);
+      document.body.style.overflow = "";
     };
   }, []);
 
@@ -110,8 +109,14 @@ export default function RecordExpense({ onClose, onSaveSuccess }) {
     }
   };
 
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="modal-overlay">
+    <div className="modal-overlay" onClick={handleOverlayClick}>
       <div className="modal-container small">
         <div className="modal-header-top">
           <h2 className="modal-title">Record New Expense</h2>

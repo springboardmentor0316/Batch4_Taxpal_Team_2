@@ -5,7 +5,6 @@
 .sidebar {
     width: 260px; 
     min-height: 100vh;
-    /* Blue Gradient matching the images */
     background: linear-gradient(180deg, #1890ff 0%, #4889d8ff 100%); 
     color: #fff;
     display: flex;
@@ -13,8 +12,7 @@
     padding: 0;
     box-shadow: 3px 0 15px rgba(0, 0, 0, 0.15);
     font-family: 'Poppins', sans-serif;
-    flex-shrink: 0;
-    position: fixed; /* Essential for the overall layout */
+    position: fixed;
     left: 0;
     top: 0;
     z-index: 1000;
@@ -40,9 +38,8 @@
     width: 45px;
     height: 45px;
     object-fit: contain;
-    border-radius:15px;
+    border-radius: 15px;
     padding: 6px;
-  
 }
 
 .app-name h1 {
@@ -62,6 +59,18 @@
     overflow-y: auto;
     padding: 10px 0;
 }
+.settings-link,
+.logout-link {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+}
+
+.settings-link:hover,
+.logout-link:hover {
+    color: #ffffff;
+    transform: translateX(2px);
+}
+
 
 .sidebar-list {
     list-style: none;
@@ -70,20 +79,18 @@
 }
 
 .sidebar-list-item {
-    margin-bottom: 2px; /* Small separation */
+    margin-bottom: 2px;
 }
 
-/* NavLink Styling */
 .nav-link {
     display: flex;
     align-items: center;
     padding: 14px 20px;
-    color: rgba(255, 255, 255, 0.85); 
+    color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
     font-size: 15px;
-    font-weight: 500; 
-    transition: background-color 0.2s, color 0.2s;
-    border-left: 4px solid transparent;
+    font-weight: 500;
+    transition: 0.25s;
 }
 
 .nav-link:hover {
@@ -94,46 +101,41 @@
 .icon {
     margin-right: 14px;
     font-size: 18px;
-    display: flex;
-    align-items: center;
-    min-width: 18px;
 }
 
-/* Active Link Style (Light blue/white block) */
 .nav-link.active {
     background-color: rgba(255, 255, 255, 0.25);
     color: #fff;
-    border-left-color: transparent; /* No strong left border line */
     font-weight: 600;
 }
 
 /* ================================================= */
-/* Bottom Profile/Settings Area */
+/* Profile Section (Full Width, Email Visible) */
 /* ================================================= */
 
 .sidebar-bottom {
     padding: 16px;
-    /* background-color: rgba(166, 188, 236, 0.2); */
-    background: linear-gradient(180deg, #1890ff 0%, #4889d8ff 100%); 
     margin-top: auto;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .profile {
+    width: 100%;
     display: flex;
     align-items: center;
     gap: 12px;
-    background-color: rgba(4, 86, 163, 0.3);
-    padding: 12px;
-    border-radius: 10px;
-    transition: background-color 0.3s;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 16px;
+    border-radius: 12px;
+    box-sizing: border-box;
+    transition: background 0.3s ease;
 }
 
 .profile:hover {
-    background-color: rgba(0, 0, 0, 0.45);
+    background: rgba(255, 255, 255, 0.18);
 }
 
-/* 💡 CORRECTED CLASS NAME: Changed .avathar to .avatar */
+
 .avatar {
     width: 42px;
     height: 42px;
@@ -145,8 +147,7 @@
 .profile-info {
     display: flex;
     flex-direction: column;
-    flex: 1;
-    gap: 4px; /* Reduced gap for a tighter look */
+    width: 100%;
 }
 
 .profile-name {
@@ -156,44 +157,37 @@
     margin: 0;
 }
 
-.profile-actions {
-    display: flex;
-    gap: 12px;
-    align-items: center;
+.profile-email {
+    font-size: 13px;
+    color: #e6e6e6;
+    line-height: 1.2;
+    white-space: normal;      /* ✅ Text wraps */
+    word-break: break-all;    /* ✅ Prevent cutoff */
 }
 
-.settings-link,
+.profile-actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 6px;
+}
 .logout-link {
     display: flex;
     align-items: center;
-    gap: 5px;
-    color: rgba(255, 255, 255, 0.8);
-    text-decoration: none;
-    transition: color 0.2s;
-    font-size: 12px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
+    gap: 6px;
+    color: rgba(255, 255, 255, 0.9) !important; /* ✅ ensure visible */
+    cursor: pointer !important; /* ✅ ensure clickable */
+    opacity: 1 !important;      /* ✅ remove faded effect */
+    pointer-events: auto !important; /* ✅ ensure it works */
 }
+
 
 .settings-link:hover,
 .logout-link:hover {
     color: #fff;
 }
 
-.settings-icon,
-.logout-icon {
-    font-size: 12px;
-}
-.profile-email {
-  font-size: 0.85rem;
-  color: #e2e6ecff;
-  margin-bottom: 4px;
-}
-
 /* ================================================= */
-/* Scrollbar Styling (Kept clean) */
+/* Scrollbar */
 /* ================================================= */
 
 .nav::-webkit-scrollbar {

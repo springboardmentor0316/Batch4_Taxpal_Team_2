@@ -63,10 +63,10 @@ export default function Sidebar() {
         </ul>
       </nav>
       
-      {/* Profile / Settings Section */}
+{/* Profile / Settings Section */}
       <div className="sidebar-bottom">
         <div className="profile">
-          <img src="/assets/images/profile.jpeg" alt="Profile" className="avathar" />
+          <img src="/assets/images/profile.jpeg" alt="Profile" className="avatar" />
           <div className="profile-info">
             <div className="profile-name">{user.name || "User"}</div>
             <div className="profile-email">{user.email || "user@example.com"}</div>
@@ -75,10 +75,10 @@ export default function Sidebar() {
                 <FaCog className="settings-icon"/>
                 Settings
               </NavLink>
-              <button className="logout-link" onClick={handleLogout}>
+              <span className="logout-link" onClick={handleLogout}>
                 <FaSignOutAlt className="logout-icon"/>
                 Logout
-              </button>
+              </span>
             </div>
           </div>
         </div>

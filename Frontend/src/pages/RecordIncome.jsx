@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/RecordsIE.css";
 
+
 export default function RecordIncome({ onClose }) {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
@@ -9,24 +10,28 @@ export default function RecordIncome({ onClose }) {
   const [notes, setNotes] = useState("");
 
   useEffect(() => {
-    const scrollY = window.scrollY;
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}px`;
+    // Prevent body scroll without affecting layout
+    document.body.style.overflow = "hidden";
+    
     return () => {
-      document.body.style.position = "";
-      document.body.style.top = "";
-      window.scrollTo(0, scrollY);
+      document.body.style.overflow = "";
     };
   }, []);
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log({ description, amount, category, date, notes });
     onClose();
   };
 
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="modal-overlay">
+    <div className="modal-overlay" onClick={handleOverlayClick}>
       <div className="modal-container small">
         <div className="modal-header-top">
           <h2 className="modal-title">Record New Income</h2>
@@ -72,8 +77,7 @@ export default function RecordIncome({ onClose }) {
             <div className="form-group half">
               <label>Date</label>
               <input 
-                type="text" 
-                placeholder="08-05-2025"
+                type="date" 
                 value={date}
                 onChange={(e) => setDate(e.target.value)} 
               />
