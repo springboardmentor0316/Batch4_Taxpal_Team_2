@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 import "../styles/Budget.css";
@@ -8,6 +8,30 @@ import CreateBudget from "./CreateBudget";
 const Budget = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [budgets, setBudgets] = useState([]);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  // Fetch budgets from backend
+  useEffect(() => {
+    fetchBudgets();
+  }, [refreshTrigger]);
+
+  const fetchBudgets = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await fetch("http://localhost:5000/api/budgets", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await res.json();
+      setBudgets(data.data || []);
+    } catch (error) {
+      console.error("Error fetching budgets:", error);
+    }
+  };
 
   const handleEditClick = () => setIsEditOpen(true);
   const handleCloseEdit = () => setIsEditOpen(false);
@@ -15,14 +39,12 @@ const Budget = () => {
   const handleCreateClick = () => setIsCreateOpen(true);
   const handleCloseCreate = () => setIsCreateOpen(false);
 
-  const budgets = [
-    { category: "Food", description: "Monthly grocery and dining budget", budget: 500, spent: 250 },
-    { category: "Rent/Mortgage", description: "Monthly housing cost", budget: 1200, spent: 800 },
-    { category: "Utilities", description: "Electricity, water, internet", budget: 200, spent: 120 },
-  ];
+  const handleSaveSuccess = () => {
+    setRefreshTrigger((prev) => prev + 1); // ✅ Refresh table after creating budget
+  };
 
-  const totalBudget = budgets.reduce((acc, item) => acc + item.budget, 0);
-  const totalSpent = budgets.reduce((acc, item) => acc + item.spent, 0);
+  const totalBudget = budgets.reduce((acc, item) => acc + item.amount, 0);
+  const totalSpent = budgets.reduce((acc, item) => acc + (item.spent || 0), 0);
   const remaining = totalBudget - totalSpent;
 
   const getProgress = (spent, budget) => (spent / budget) * 100;
@@ -41,6 +63,7 @@ const Budget = () => {
             </div>
             <p className="content-text">Track and manage your spending efficiently.</p>
 
+            {/* Summary Cards */}
             <div className="summary-cards">
               <div className="card">
                 <h3>Total Budget</h3>
@@ -59,6 +82,7 @@ const Budget = () => {
               </div>
             </div>
 
+            {/* Budgets Table */}
             <div className="budget-table">
               <h3>Your Budgets</h3>
               <table>
@@ -75,8 +99,10 @@ const Budget = () => {
                 </thead>
                 <tbody>
                   {budgets.map((b, i) => {
-                    const progress = getProgress(b.spent, b.budget);
-                    const remainingAmount = b.budget - b.spent;
+                    const spent = b.spent || 0;
+                    const progress = getProgress(spent, b.amount);
+                    const remainingAmount = b.amount - spent;
+
                     return (
                       <tr key={i}>
                         <td>
@@ -84,8 +110,8 @@ const Budget = () => {
                           <br />
                           <small>{b.description}</small>
                         </td>
-                        <td>${b.budget.toFixed(2)}</td>
-                        <td>${b.spent.toFixed(2)}</td>
+                        <td>${b.amount.toFixed(2)}</td>
+                        <td>${spent.toFixed(2)}</td>
                         <td className="green">${remainingAmount.toFixed(2)}</td>
                         <td>
                           <div className="progress-bar">
@@ -113,7 +139,7 @@ const Budget = () => {
       </div>
 
       {isEditOpen && <EditBudget onClose={handleCloseEdit} />}
-      {isCreateOpen && <CreateBudget onClose={handleCloseCreate} />}
+      {isCreateOpen && <CreateBudget onClose={handleCloseCreate} onSaveSuccess={handleSaveSuccess} />}
     </>
   );
 };
