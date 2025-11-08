@@ -246,7 +246,7 @@
     align-items: flex-start;
     gap: 16px;
   }
-
+ 
   .header-actions {
     flex-direction: column;
     width: 100%;

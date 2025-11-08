@@ -51,92 +51,101 @@ const Budget = () => {
 
   return (
     <>
-      <div className={`budget-container ${(isEditOpen || isCreateOpen) ? "blurred" : ""}`}>
-        <main className="main-content">
-          <div className="budget-wrapper">
-            <div className="header">
-              <h1>Budget Management</h1>
-              <div className="header-right">
-                <span className="warning">Warning</span>
-                <button className="create-btn" onClick={handleCreateClick}>+ Create Budget</button>
-              </div>
-            </div>
-            <p className="content-text">Track and manage your spending efficiently.</p>
-
-            {/* Summary Cards */}
-            <div className="summary-cards">
-              <div className="card">
-                <h3>Total Budget</h3>
-                <p className="amount">${totalBudget.toFixed(2)}</p>
-                <small>Across all categories</small>
-              </div>
-              <div className="card">
-                <h3>Total Spent</h3>
-                <p className="amount">${totalSpent.toFixed(2)}</p>
-                <small>{((totalSpent / totalBudget) * 100).toFixed(1)}% of budget</small>
-              </div>
-              <div className="card">
-                <h3>Remaining</h3>
-                <p className="amount">${remaining.toFixed(2)}</p>
-                <small>{((remaining / totalBudget) * 100).toFixed(1)}% remaining</small>
-              </div>
-            </div>
-
-            {/* Budgets Table */}
-            <div className="budget-table">
-              <h3>Your Budgets</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Category</th>
-                    <th>Budget</th>
-                    <th>Spent</th>
-                    <th>Remaining</th>
-                    <th>Progress</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {budgets.map((b, i) => {
-                    const spent = b.spent || 0;
-                    const progress = getProgress(spent, b.amount);
-                    const remainingAmount = b.amount - spent;
-
-                    return (
-                      <tr key={i}>
-                        <td>
-                          <strong>{b.category}</strong>
-                          <br />
-                          <small>{b.description}</small>
-                        </td>
-                        <td>${b.amount.toFixed(2)}</td>
-                        <td>${spent.toFixed(2)}</td>
-                        <td className="green">${remainingAmount.toFixed(2)}</td>
-                        <td>
-                          <div className="progress-bar">
-                            <div className="progress-fill" style={{ width: `${progress}%` }}></div>
-                          </div>
-                          <small>{Math.round(progress)}%</small>
-                        </td>
-                        <td className="status ontrack">On Track</td>
-                        <td className="actions">
-                          <button className="edit" onClick={handleEditClick}>
-                            <FontAwesomeIcon icon={faEdit} />
-                          </button>
-                          <button className="delete">
-                            <FontAwesomeIcon icon={faTrashAlt} />
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+      {/* 1. Use 'main-content' as the primary container next to the sidebar. 
+        2. Apply the 'blurred' class directly here for consistency. 
+        3. Remove 'budget-container' if 'main-content' handles layout. 
+      */}
+      <main className={`main-content ${isEditOpen || isCreateOpen ? "blurred" : ""}`}>
+        {/* 4. Replace 'budget-wrapper' with a simple 'budget-container' or 
+             remove it completely and let the content start here. 
+             If we must keep an inner div, we'll use 'budget-content'
+             and remove the problematic 'budget-wrapper' entirely.
+        */}
+        <div className="budget-content"> 
+          <div className="header">
+            <h1>Budget Management</h1>
+            <div className="header-right">
+              <span className="warning">Warning</span>
+              <button className="create-btn" onClick={handleCreateClick}>
+                + Create Budget
+              </button>
             </div>
           </div>
-        </main>
-      </div>
+          <p className="content-text">Track and manage your spending efficiently.</p>
+
+          {/* Summary Cards */}
+          <div className="summary-cards">
+            <div className="card">
+              <h3>Total Budget</h3>
+              <p className="amount">${totalBudget.toFixed(2)}</p>
+              <small>Across all categories</small>
+            </div>
+            <div className="card">
+              <h3>Total Spent</h3>
+              <p className="amount">${totalSpent.toFixed(2)}</p>
+              <small>{((totalSpent / totalBudget) * 100).toFixed(1)}% of budget</small>
+            </div>
+            <div className="card">
+              <h3>Remaining</h3>
+              <p className="amount">${remaining.toFixed(2)}</p>
+              <small>{((remaining / totalBudget) * 100).toFixed(1)}% remaining</small>
+            </div>
+          </div>
+
+          {/* Budgets Table */}
+          <div className="budget-table">
+            <h3>Your Budgets</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Budget</th>
+                  <th>Spent</th>
+                  <th>Remaining</th>
+                  <th>Progress</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {budgets.map((b, i) => {
+                  const spent = b.spent || 0;
+                  const progress = getProgress(spent, b.amount);
+                  const remainingAmount = b.amount - spent;
+
+                  return (
+                    <tr key={i}>
+                      <td>
+                        <strong>{b.category}</strong>
+                        <br />
+                        <small>{b.description}</small>
+                      </td>
+                      <td>${b.amount.toFixed(2)}</td>
+                      <td>${spent.toFixed(2)}</td>
+                      <td className="green">${remainingAmount.toFixed(2)}</td>
+                      <td>
+                        <div className="progress-bar">
+                          <div className="progress-fill" style={{ width: `${progress}%` }}></div>
+                        </div>
+                        <small>{Math.round(progress)}%</small>
+                      </td>
+                      <td className="status ontrack">On Track</td>
+                      <td className="actions">
+                        <button className="edit" onClick={handleEditClick}>
+                          <FontAwesomeIcon icon={faEdit} />
+                        </button>
+                        <button className="delete">
+                          <FontAwesomeIcon icon={faTrashAlt} />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
 
       {isEditOpen && <EditBudget onClose={handleCloseEdit} />}
       {isCreateOpen && <CreateBudget onClose={handleCloseCreate} onSaveSuccess={handleSaveSuccess} />}

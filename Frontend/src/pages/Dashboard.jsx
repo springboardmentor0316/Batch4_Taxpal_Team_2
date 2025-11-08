@@ -124,7 +124,7 @@ export default function Dashboard() {
 
       {/* Recent Transactions */}
       <section className="transactions-section">
-        <h3>Recent Transactions</h3>
+      
         <Transactions refreshTrigger={refreshTrigger} />
       </section>
 

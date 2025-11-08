@@ -67,7 +67,7 @@ export default function Graphs({ refreshTrigger }) {
   };
 
   return (
-    <section className="charts-row" style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+    <section className="charts-row" >
 
       {/* Bar Chart */}
       <div className="chart-panel" style={{ flex: 1, minWidth: "300px", marginLeft: "20px" }}>
