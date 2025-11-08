@@ -5,7 +5,8 @@ export default function RecordExpense({ onClose, onSaveSuccess }) {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
-  const [date, setDate] = useState("");
+const [date, setDate] = useState(new Date().toISOString().substring(0, 10));
+
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});

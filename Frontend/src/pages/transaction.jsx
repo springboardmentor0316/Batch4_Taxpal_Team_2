@@ -1,37 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import "../styles/Transaction.css";
 
-export default function Transactions({ refreshTrigger }) {
+export default function Transactions({ refreshTrigger, isDashboardView, onViewAllClick }) {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchRecentTransactions();
-  }, [refreshTrigger]); // Refetch when refreshTrigger changes
+    fetchTransactions();
+  }, [refreshTrigger]);
 
-  const fetchRecentTransactions = async () => {
+  const fetchTransactions = async () => {
     try {
       const token = localStorage.getItem("token");
-      if (!token) {
-        console.error("No token found");
-        return;
-      }
+      if (!token) return;
 
-      const response = await fetch(
-        "http://localhost:5000/api/transactions/recent?limit=5",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const endpoint = isDashboardView
+        ? "http://localhost:5000/api/transactions/recent?limit=5"
+        : "http://localhost:5000/api/transactions"; // Fetch ALL when not dashboard view
+
+      const response = await fetch(endpoint, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       if (response.ok) {
         const data = await response.json();
         setTransactions(data.data);
-      } else {
-        console.error("Failed to fetch transactions");
       }
     } catch (error) {
       console.error("Error fetching transactions:", error);
@@ -40,19 +33,15 @@ export default function Transactions({ refreshTrigger }) {
     }
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
+  const formatDate = (dateString) =>
+    new Date(dateString).toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
       year: "numeric",
     });
-  };
 
-  const formatAmount = (amount, type) => {
-    const formattedAmount = `$${amount.toFixed(2)}`;
-    return type === "income" ? `+${formattedAmount}` : `-${formattedAmount}`;
-  };
+  const formatAmount = (amount, type) =>
+    `${type === "income" ? "+" : "-"}$${amount.toFixed(2)}`;
 
   if (loading) {
     return (
@@ -75,10 +64,13 @@ export default function Transactions({ refreshTrigger }) {
   return (
     <div className="transactions-container">
       <div className="transactions-header">
-        <h3>Recent Transactions</h3>
-        <Link to="/transactions" className="view-all-link">
-          View All
-        </Link>
+        <h3>{isDashboardView ? "Recent Transactions" : "All Transactions"}</h3>
+
+        {isDashboardView && (
+          <button className="view-all-link" onClick={onViewAllClick}>
+            View All
+          </button>
+        )}
       </div>
 
       <div className="transactions-table">
@@ -93,28 +85,17 @@ export default function Transactions({ refreshTrigger }) {
             </tr>
           </thead>
           <tbody>
-            {transactions.map((transaction) => (
-              <tr key={transaction._id}>
-                <td>{formatDate(transaction.date)}</td>
-                <td>{transaction.description}</td>
-                <td>{transaction.category}</td>
-                <td
-                  className={
-                    transaction.type === "income"
-                      ? "amount-positive"
-                      : "amount-negative"
-                  }
-                >
-                  {formatAmount(transaction.amount, transaction.type)}
+            {transactions.map((t) => (
+              <tr key={t._id}>
+                <td>{formatDate(t.date)}</td>
+                <td>{t.description}</td>
+                <td>{t.category}</td>
+                <td className={t.type === "income" ? "amount-positive" : "amount-negative"}>
+                  {formatAmount(t.amount, t.type)}
                 </td>
                 <td>
-                  <span
-                    className={`type-badge ${
-                      transaction.type === "income" ? "badge-income" : "badge-expense"
-                    }`}
-                  >
-                    {transaction.type.charAt(0).toUpperCase() +
-                      transaction.type.slice(1)}
+                  <span className={`type-badge ${t.type === "income" ? "badge-income" : "badge-expense"}`}>
+                    {t.type.charAt(0).toUpperCase() + t.type.slice(1)}
                   </span>
                 </td>
               </tr>

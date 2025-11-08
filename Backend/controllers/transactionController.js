@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Transaction from "../models/transaction.js";
 
 // Record Income
@@ -158,35 +159,31 @@ export const getRecentTransactions = async (req, res) => {
   }
 };
 
-// Get transaction summary (total income, total expense)
 export const getTransactionSummary = async (req, res) => {
   try {
     const userId = req.user.id;
     const { startDate, endDate } = req.query;
 
-    // Build date filter
-    const dateFilter = {};
-    if (startDate) dateFilter.$gte = new Date(startDate);
-    if (endDate) dateFilter.$lte = new Date(endDate);
+    const start = startDate ? new Date(startDate) : null;
+    const end = endDate ? new Date(endDate) : null;
 
-    const query = { userId };
-    if (Object.keys(dateFilter).length > 0) {
-      query.date = dateFilter;
-    }
-
-    // Calculate totals
-    const income = await Transaction.aggregate([
-      { $match: { ...query, type: "income" } },
-      { $group: { _id: null, total: { $sum: "$amount" } } },
+    const summary = await Transaction.aggregate([
+      {
+        $match: {
+          userId: new mongoose.Types.ObjectId(userId),   // ✅ MUST CONVERT ID
+          ...(start && end ? { date: { $gte: start, $lt: end } } : {})
+        },
+      },
+      {
+        $group: {
+          _id: "$type",
+          total: { $sum: "$amount" },
+        },
+      },
     ]);
 
-    const expense = await Transaction.aggregate([
-      { $match: { ...query, type: "expense" } },
-      { $group: { _id: null, total: { $sum: "$amount" } } },
-    ]);
-
-    const totalIncome = income.length > 0 ? income[0].total : 0;
-    const totalExpense = expense.length > 0 ? expense[0].total : 0;
+    const totalIncome = summary.find((x) => x._id === "income")?.total || 0;
+    const totalExpense = summary.find((x) => x._id === "expense")?.total || 0;
 
     res.status(200).json({
       success: true,
@@ -197,7 +194,7 @@ export const getTransactionSummary = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Error fetching transaction summary:", error);
+    console.error("Error fetching summary:", error);
     res.status(500).json({
       success: false,
       error: "Failed to fetch transaction summary",
