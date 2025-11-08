@@ -91,15 +91,7 @@
   font-size: 15px;
 }
 
-.input-with-icon input {
-  width: 100%;
-  padding: 12px 38px;
-  border-radius: 8px;
-  border: 1px solid #d0d0d0;
-  font-size: 14px;
-  background-color: #eef0f2;
-  transition: 0.3s;
-}
+
 
 .input-with-icon input:focus {
   outline: none;
