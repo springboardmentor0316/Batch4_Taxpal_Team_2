@@ -2,10 +2,11 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
-
+import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
 import budgetRoutes from "./routes/budgetRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
 dotenv.config();
 const app = express();
 
@@ -23,10 +24,11 @@ mongoose
   .catch((err) => console.error("❌ MongoDB Error:", err));
 
 // Routes
+app.use("/api/user", userRoutes)
 app.use("/api/auth", authRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/budgets", budgetRoutes);
-
+app.use("/api/categories", categoryRoutes);
 // Health check
 app.get("/", (req, res) => {
   res.json({ message: "TaxPal API is running" });

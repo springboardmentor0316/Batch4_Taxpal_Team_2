@@ -13,7 +13,7 @@ export const authenticateToken = (req, res, next) => {
       });
     }
 
-    // Verify token
+    // Verify tokeexport const auth = (req, res, next) => {n
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
         return res.status(403).json({
