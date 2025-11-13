@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import "../styles/Login.css";
 import { toast } from "react-toastify";
+import "../styles/InputField.css";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,7 +37,7 @@ const Login = () => {
       localStorage.setItem("user", JSON.stringify(data.user));
       
       toast.success("Login successful!");
-      navigate("/");
+      navigate("/Dashboard");
       
     } catch (err) {
       console.error("Login error:", err);

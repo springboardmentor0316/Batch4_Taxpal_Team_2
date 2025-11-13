@@ -1,0 +1,63 @@
+.period-buttons {
+  display: flex;
+  gap: 8px;
+  margin-bottom:20px;
+}
+
+.period {
+  padding: 6px 18px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid #d1d5db;
+  border-radius: 9999px; /* pill shape */
+  background-color: #f9fafb;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.period:hover {
+  background-color: #e5e7eb;
+}
+
+.period.active {
+  background-color: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+}
+.charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;   /* Two equal columns */
+  gap: 24px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 20px;
+  margin-top: 20px;
+}
+.chart-panel {
+  background: #fff;
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Bar Chart Section */
+.chart-panel .panel-body {
+  flex-grow: 1;
+}
+
+/* Donut Chart Centering */
+.chart-panel:last-child .panel-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.chart-panel ul {
+  margin-top: 12px;
+  width: 100%;
+}
