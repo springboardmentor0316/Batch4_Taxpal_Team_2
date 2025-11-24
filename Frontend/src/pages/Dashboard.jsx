@@ -91,8 +91,8 @@ export default function Dashboard() {
       <Graphs refreshTrigger={refreshTrigger} />
 
       {/* Recent Transactions preview */}
-      <section className="transactions-section">
-        <Transactions
+      <section className="transactions-section" >
+        <Transactions 
           refreshTrigger={refreshTrigger}
           isDashboardView={true}
           onViewAllClick={() => setViewAll(true)} // ✅ OPEN FULL PAGE

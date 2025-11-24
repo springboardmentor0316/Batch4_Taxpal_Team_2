@@ -1,0 +1,225 @@
+/* ------------------------------------------------------------------ */
+/* File: TaxEstimator.css (replace your old css with this file)       */
+/* ------------------------------------------------------------------ */
+
+:root {
+  --bg: #f9fafc;
+  --card-bg: #ffffff;
+  --muted: #6b7280;
+  --primary: #2563eb; /* blue */
+  --primary-600: #1d4ed8;
+  --accent: #10b981; /* green */
+  --heading: #1f2937;
+  --brand: #1b3b7d;
+}
+
+.tax-estimator-container {
+  padding: 20px;
+  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color: var(--heading);
+  background: var(--bg);
+  min-height: 100vh;
+  box-sizing: border-box;
+  max-width: 1400px;
+  margin: 0px 0px 0px 270px;
+}
+
+.page-header {
+  text-align: left; /* like code3 */
+  margin-bottom: 24px;
+}
+
+.page-header .title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--heading);
+}
+
+.page-header .subtitle {
+  color: var(--muted);
+  margin-top: 4px;
+  font-size: 1rem;
+}
+
+/* Grid */
+.content-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* Left card (form) */
+.calculator-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.section-heading {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--heading);
+}
+
+.sub-heading {
+  margin-top: 18px;
+  font-size: 1rem;
+  color: var(--heading);
+  font-weight: 600;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  font-size: 0.95rem;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--brand);
+  background: #fff;
+}
+
+/* Action row (buttons) */
+.actions-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.btn-calculate {
+  flex: 1;
+  padding: 0.85rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-calculate.primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-calculate.primary:hover {
+  background-color: var(--primary-600);
+}
+
+.btn-save {
+  width: 160px;
+  padding: 0.85rem;
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-save:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.error-text {
+  color: red;
+  margin-top: 12px;
+}
+
+/* Right panel and summary */
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.summary-card.intro {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.summary-heading {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--heading);
+  margin-bottom: 6px;
+}
+
+.summary-sub {
+  font-size: 0.875rem;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.placeholder-content {
+  padding: 32px 0;
+  color: #9ca3af;
+  text-align: center;
+}
+
+.calculator-icon {
+  font-size: 3rem;
+  color: var(--brand);
+  margin-bottom: 8px;
+}
+
+.result-card {
+  background: var(--card-bg);
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+.result-note {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .content-grid { grid-template-columns: 1fr; }
+  .form-row { flex-direction: column; }
+  .actions-row { flex-direction: column; }
+  .btn-save { width: 100%; }
+}

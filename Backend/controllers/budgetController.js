@@ -6,7 +6,7 @@ export const createBudget = async (req, res) => {
     const { category, amount, month, description } = req.body;
 
     const budget = await Budget.create({
-      userId: req.user.id, // ✅ Comes from authenticateToken
+      userId: req.userId, // from authenticate middleware
       category,
       amount,
       month,
@@ -21,7 +21,7 @@ export const createBudget = async (req, res) => {
 
 export const getBudgets = async (req, res) => {
   try {
-    const budgets = await Budget.find({ userId: req.user.id });
+    const budgets = await Budget.find({ userId: req.userId });
     res.json({ success: true, data: budgets });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

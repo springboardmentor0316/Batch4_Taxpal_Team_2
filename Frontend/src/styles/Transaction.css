@@ -1,14 +1,23 @@
 /* ================================================= */
 /* Transaction.css */
 /* ================================================= */
-
+.transactions{
+  margin-left: 240px;
+    padding: 32px;
+    min-height: 100vh;
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    color: var(--text-dark);
+    box-sizing: border-box;
+    transition: margin-left 0.3s ease;
+    overflow-x: hidden;
+}
 .transactions-container {
   background: #ffffff;
-  padding: 24px;
+  padding: 20px;
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   border: 1px solid #e5e7eb;
-  margin-top: 24px;
+  margin-top: 24px; 
 }
 
 .transactions-header {

@@ -18,6 +18,9 @@ import Setting from "./pages/settings";
 import Budget from "./pages/Budget";
 import Sidebar from "./pages/Sidebar";
 import Home from "./pages/Home";
+import Transaction from "./pages/transaction";
+import TaxEstimator from "./pages/TaxEstimator";
+import TaxCalendar from "./pages/TaxCalendar";
 
 
 // Protected Route Component
@@ -75,7 +78,25 @@ function App() {
             <Budget />
           </ProtectedRoute>
         } />
+        <Route path="/TaxEstimator" element={
+          <ProtectedRoute>
+          <TaxEstimator />
+        </ProtectedRoute>
+      } />
+        <Route path="/TaxCalendar" element={
+          <ProtectedRoute>
+          <TaxCalendar />
+        </ProtectedRoute>
+      } />
 
+       <Route path="/transaction" element={
+          <ProtectedRoute>
+          <Transaction />
+        </ProtectedRoute>
+      } />
+
+      
+        
         {/* Catch all route */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

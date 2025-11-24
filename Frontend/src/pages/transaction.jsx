@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , useCallback} from "react";
 import "../styles/Transaction.css";
 
 export default function Transactions({ refreshTrigger, isDashboardView, onViewAllClick }) {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchTransactions();
-  }, [refreshTrigger]);
+  
 
-  const fetchTransactions = async () => {
+
+  const fetchTransactions = useCallback( async () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
@@ -31,7 +30,11 @@ export default function Transactions({ refreshTrigger, isDashboardView, onViewAl
     } finally {
       setLoading(false);
     }
-  };
+  } , [isDashboardView]);
+
+  useEffect(() => {
+    fetchTransactions();
+  }, [fetchTransactions, refreshTrigger]);
 
   const formatDate = (dateString) =>
     new Date(dateString).toLocaleDateString("en-US", {
@@ -62,6 +65,7 @@ export default function Transactions({ refreshTrigger, isDashboardView, onViewAl
   }
 
   return (
+  <div className="transactions">
     <div className="transactions-container">
       <div className="transactions-header">
         <h3>{isDashboardView ? "Recent Transactions" : "All Transactions"}</h3>
@@ -103,6 +107,7 @@ export default function Transactions({ refreshTrigger, isDashboardView, onViewAl
           </tbody>
         </table>
       </div>
+    </div>
     </div>
   );
 }

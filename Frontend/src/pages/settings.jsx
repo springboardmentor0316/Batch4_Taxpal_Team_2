@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { FiEdit2, FiX, FiPlus, FiUser, FiCamera, FiLock, FiLogOut } from "react-icons/fi";
-import "../styles/settings.css";
+import "../styles/Settings.css";
 
 export default function Settings() {
   const [panel, setPanel] = useState("profile");

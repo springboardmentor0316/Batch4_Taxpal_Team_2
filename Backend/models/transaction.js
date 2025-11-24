@@ -1,3 +1,4 @@
+// models/Transaction.js
 import mongoose from "mongoose";
 
 const transactionSchema = new mongoose.Schema(
@@ -38,14 +39,12 @@ const transactionSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // Adds createdAt and updatedAt fields
+    timestamps: true,
   }
 );
 
-// Index for faster queries
 transactionSchema.index({ userId: 1, date: -1 });
 transactionSchema.index({ userId: 1, type: 1 });
 
-const Transaction = mongoose.model("Transaction", transactionSchema);
-
+const Transaction = mongoose.models.Transaction || mongoose.model("Transaction", transactionSchema);
 export default Transaction;
