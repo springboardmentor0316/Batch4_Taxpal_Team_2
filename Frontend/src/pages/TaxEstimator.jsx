@@ -1,7 +1,10 @@
-// File: TaxEstimator.jsx
-import React, { useState } from 'react';
+// src/pages/TaxEstimator.jsx
+import React, { useState, useEffect } from 'react';
 import '../styles/TaxEstimator.css';
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 export default function TaxEstimator() {
   const [formData, setFormData] = useState({
@@ -24,16 +27,11 @@ export default function TaxEstimator() {
   const [existingRecord, setExistingRecord] = useState(null);
   const [saving, setSaving] = useState(false);
 
-  // ======= TAX FUNCTIONS (NO CHANGES) ==========
-  // function calculateIndiaTax(income) {
-  //   if (income <= 300000) return 0;
-  //   if (income <= 600000) return (income - 300000) * 0.05;
-  //   if (income <= 900000) return 15000 + (income - 600000) * 0.1;
-  //   if (income <= 1200000) return 45000 + (income - 900000) * 0.15;
-  //   if (income <= 1500000) return 90000 + (income - 1200000) * 0.2;
-  //   return 150000 + (income - 1500000) * 0.3;
-  // }
+  // History state (saved results list)
+  const [history, setHistory] = useState([]);
+  const [historyLoading, setHistoryLoading] = useState(true);
 
+  // ======= TAX FUNCTIONS (unchanged business logic) ==========
   function calculateUSTax(income) {
     if (income <= 11000) return income * 0.1;
     if (income <= 44725) return 1100 + (income - 11000) * 0.12;
@@ -51,20 +49,10 @@ export default function TaxEstimator() {
     return 7540 + 29948 + (income - 125140) * 0.45;
   }
 
-  // function calculateAustraliaTax(income) {
-  //   if (income <= 18200) return 0;
-  //   if (income <= 45000) return (income - 18200) * 0.19;
-  //   if (income <= 120000) return 5092 + (income - 45000) * 0.325;
-  //   if (income <= 180000) return 29467 + (income - 120000) * 0.37;
-  //   return 51667 + (income - 180000) * 0.45;
-  // }
-
   function calculateTaxByRegion(region, income) {
     switch (region) {
-      // case 'India': return calculateIndiaTax(income);
       case 'United States': return calculateUSTax(income);
       case 'United Kingdom': return calculateUKTax(income);
-      // case 'Australia': return calculateAustraliaTax(income);
       default: return income * 0.25;
     }
   }
@@ -81,14 +69,41 @@ export default function TaxEstimator() {
     const c = countryCode.toLowerCase();
     if (c === 'us' || c === 'usa') return 'United States';
     if (c === 'uk') return 'United Kingdom';
-    // if (c === 'au') return 'Australia';
-    // if (c === 'in') return 'India';
     return countryCode;
   };
 
-  // calculateTax, saveResult, handleInputChange — unchanged (kept exactly as in original code)
-  // ... (for brevity in this canvas the full unchanged functions are included below)
+  // ----------------- History loader -----------------
+  const loadHistory = async () => {
+    setHistoryLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API}/api/tax/history`, {
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        }
+      });
+      if (!res.ok) {
+        console.warn('Failed to fetch tax history', res.status);
+        setHistory([]);
+      } else {
+        const j = await res.json().catch(() => ({}));
+        setHistory(j.data || []);
+      }
+    } catch (err) {
+      console.error('loadHistory error', err);
+      setHistory([]);
+    } finally {
+      setHistoryLoading(false);
+    }
+  };
 
+  useEffect(() => {
+    loadHistory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // ----------------- calculateTax function -----------------
   const calculateTax = async (save = false) => {
     setLoading(true);
     setError('');
@@ -135,12 +150,13 @@ export default function TaxEstimator() {
           const normalized = {
             taxable_income: serverResponseJson?.result?.taxable ?? taxable,
             estimated_tax: serverResponseJson?.result?.tax ?? null,
-             rawServer: serverResponseJson
+            rawServer: serverResponseJson
           };
           if (normalized.estimated_tax == null) {
             normalized.estimated_tax = calculateTaxByRegion(region, normalized.taxable_income);
           }
           setResult(normalized);
+
           try {
             const quarter = (payload.quarter || "").toString().toUpperCase();
             const year = new Date().getFullYear();
@@ -150,17 +166,18 @@ export default function TaxEstimator() {
           } catch (e) {
             console.warn("taxCalculated dispatch error", e);
           }
+
           setLoading(false);
           return;
         } else {
           const serverMsg = (serverResponseJson && (serverResponseJson.message || serverResponseJson.error)) || 'Server calculation failed';
           console.warn('Server responded non-ok:', serverMsg);
         }
-          } catch (err) {
+      } catch (err) {
         console.warn('Server call failed (falling back to client calc):', err);
-        // continue to client-side fallback
-      }   
+      }
 
+      // Client-side fallback calculation
       const clientEstimatedTax = calculateTaxByRegion(region, taxable);
       const normalizedLocal = {
         taxable_income: taxable,
@@ -187,47 +204,47 @@ export default function TaxEstimator() {
     }
   };
 
+  // ----------------- saveResult (shows toast + reloads history) -----------------
   const saveResult = async () => {
     if (!result) {
       toast.error('No result to save. Calculate first.');
       return;
     }
     const token = localStorage.getItem('token');
-  if (!token) {
-    // No token -> frontend should ask user to login
-    setError('You must be logged in to save. Please login and try again.');
-    // optionally redirect: window.location.href = '/login';
-    return;
-  }
+    if (!token) {
+      setError('You must be logged in to save. Please login and try again.');
+      toast.error('You must be logged in to save. Please login and try again.');
+      return;
+    }
+
     setSaving(true);
     setError('');
     try {
       try {
-        const resp = await fetch(`${API}/api/tax`, { 
+        const resp = await fetch(`${API}/api/tax/history`, {
           method: 'GET',
           headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-         });
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
         if (resp.ok) {
           const data = await resp.json().catch(() => null);
-          if (Array.isArray(data) && data.length > 0) {
-            setExistingRecord(data[0]);
-          } else if (data && data._id) {
-            setExistingRecord(data);
+          const items = data?.data || [];
+          if (items.length > 0) {
+            setExistingRecord(items[0]);
+          } else {
+            setExistingRecord(null);
+          }
+        } else {
+          if (resp.status === 401 || resp.status === 403) {
+            throw new Error('Unauthorized. Please login again.');
           }
         }
-       else {
-        // If 401/403, surface a friendly message
-        if (resp.status === 401 || resp.status === 403) {
-          throw new Error('Unauthorized. Please login again.');
-        }
+      } catch (e) {
+        console.warn('GET existing record failed:', e);
       }
-    } catch (e) {
-      // swallow non-fatal GET errors (we continue to save path)
-      console.warn('GET existing record failed:', e);
-    }
 
       const payload = {
         annualIncome: result.taxable_income != null ? result.taxable_income + (0) : null,
@@ -252,10 +269,10 @@ export default function TaxEstimator() {
 
       const resp = await fetch(url, {
         method,
-         headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify(payload)
       });
 
@@ -268,6 +285,8 @@ export default function TaxEstimator() {
       setExistingRecord(saved || { ...payload });
       setError('');
       toast.success('Saved successfully!');
+      // reload history so new item appears immediately
+      await loadHistory();
     } catch (err) {
       console.error('saveResult error', err);
       toast.error(err.message || 'Failed to save result');
@@ -276,21 +295,60 @@ export default function TaxEstimator() {
     }
   };
 
+  // ----------------- DELETE record handler (icon with confirm) -----------------
+  const handleDeleteRecord = async (id) => {
+    if (!id) return;
+    const confirmed = window.confirm("Do you really want to delete this saved tax record?");
+    if (!confirmed) return;
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      toast.error('You must be logged in to delete records.');
+      return;
+    }
+
+    try {
+      const resp = await fetch(`${API}/api/tax/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const j = await resp.json().catch(() => null);
+      if (resp.ok) {
+        toast.success(j?.message || 'Deleted successfully');
+        // reload history after deletion
+        await loadHistory();
+      } else {
+        toast.error(j?.message || 'Delete failed');
+      }
+    } catch (err) {
+      console.error('delete error', err);
+      toast.error('Delete failed due to network or server error');
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  // ----------------- render -----------------
   return (
     <div className="tax-estimator-container">
+
+      {/* Toast container for this page */}
+      <ToastContainer position="top-right" autoClose={3000} />
 
       <div className="page-header">
         <h1 className="title">Tax Estimator</h1>
         <p className="subtitle">Calculate your estimated tax obligations</p>
       </div>
 
+      {/* content-grid: left column (calculator), right column (summary) */}
       <div className="content-grid">
-
         {/* LEFT CARD */}
         <div className="calculator-card">
           <h2 className="section-heading">Quarterly Tax Calculator</h2>
@@ -300,10 +358,8 @@ export default function TaxEstimator() {
               <label>Country/Region</label>
               <select name="country" value={formData.country} onChange={handleInputChange}>
                 <option value="">Select country</option>
-                {/* <option value="in">India</option> */}
                 <option value="us">United States</option>
                 <option value="uk">United Kingdom</option>
-                {/* <option value="au">Australia</option> */}
               </select>
             </div>
 
@@ -373,11 +429,7 @@ export default function TaxEstimator() {
           </div>
 
           <div className="actions-row">
-
-            <button className="btn-calculate primary" onClick={() => calculateTax(false)} 
-              // onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#1d4ed8'}
-              // onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2563eb'}
-            >
+            <button className="btn-calculate primary" onClick={() => calculateTax(false)}>
               {loading ? "Calculating..." : "📊 Calculate Estimated Tax"}
             </button>
 
@@ -413,8 +465,59 @@ export default function TaxEstimator() {
           </div>
         </div>
 
+        {/* ===== History: placed inside the grid and constrained to left column so it sits below the calculator ===== */}
+        <div className="history-section left-column">
+          <h3 className="summary-heading">📘 Saved Tax Results</h3>
+          <p className="summary-sub">Your previously saved tax calculations</p>
+
+          {historyLoading ? (
+            <p>Loading history...</p>
+          ) : history.length === 0 ? (
+            <p>No saved tax results found.</p>
+          ) : (
+            <div className="history-table-wrapper">
+              <table className="history-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Annual Income</th>
+                    <th>Taxable Income</th>
+                    <th>Deductions</th>
+                    <th>Estimated Tax</th>
+                    <th>Quarterly Tax</th>
+                    <th>Region</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {history.map(record => (
+                    <tr key={record._id}>
+                      <td>{new Date(record.createdAt).toLocaleDateString()}</td>
+                      <td>${(record.annualIncome || 0).toLocaleString()}</td>
+                      <td>${(record.taxableIncome || 0).toLocaleString()}</td>
+                      <td>${(record.deductions || 0).toLocaleString()}</td>
+                      <td>${(record.estimatedTax || 0).toLocaleString()}</td>
+                      <td>${(record.estimatedQuarterlyTaxes || 0).toLocaleString()}</td>
+                      <td>{record.region}</td>
+                      <td>{record.status || '—'}</td>
+                      <td>
+                        <button
+                          className="history-delete-btn"
+                          title="Delete saved record"
+                          onClick={() => handleDeleteRecord(record._id)}
+                        >
+                          <FontAwesomeIcon icon={faTrashAlt} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       </div>
     </div >
   );
 }
-

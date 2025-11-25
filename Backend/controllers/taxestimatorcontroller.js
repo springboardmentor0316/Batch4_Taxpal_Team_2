@@ -1,4 +1,4 @@
-// controllers/taxEstimatorController.js
+// controllers/taxestimatorcontroller.js
 import Tax from "../models/taxestimator.js";
 
 function calculateIndiaTax(income) {
@@ -95,7 +95,7 @@ export async function save(req, res) {
       status: payload.status || "",
     });
     const saved = await doc.save();
-    return res.status(201).json(saved);
+    return res.status(201).json({ success: true, data: saved });
   } catch (err) {
     console.error("save error", err);
     return res.status(500).json({ ok: false, error: "Failed to save" });
@@ -106,11 +106,11 @@ export async function list(req, res) {
   try {
     const q = {};
     if (req.userId) q.userId = req.userId;
-    const docs = await Tax.find(q).sort({ createdAt: -1 }).limit(50);
-    return res.json(docs);
+    const docs = await Tax.find(q).sort({ createdAt: -1 }).limit(100);
+    return res.json({ success: true, data: docs });
   } catch (err) {
     console.error("list error", err);
-    return res.status(500).json([]);
+    return res.status(500).json({ success: false, data: [] });
   }
 }
 
@@ -120,9 +120,29 @@ export async function update(req, res) {
     const body = req.body || {};
     const updated = await Tax.findByIdAndUpdate(id, body, { new: true });
     if (!updated) return res.status(404).json({ ok: false, error: "Not found" });
-    return res.json(updated);
+    return res.json({ success: true, data: updated });
   } catch (err) {
     console.error("update error", err);
     return res.status(500).json({ ok: false, error: "Update failed" });
   }
 }
+
+export async function remove(req, res) {
+  try {
+    const id = req.params.id;
+    const doc = await Tax.findById(id);
+    if (!doc) return res.status(404).json({ success: false, message: "Not found" });
+
+    // If your save stores userId, ensure only owner can delete:
+    if (req.userId && doc.userId && String(doc.userId) !== String(req.userId)) {
+      return res.status(403).json({ success: false, message: "Not authorized" });
+    }
+
+    await Tax.findByIdAndDelete(id);
+    return res.json({ success: true, message: "Deleted successfully" });
+  } catch (err) {
+    console.error("delete error", err);
+    return res.status(500).json({ success: false, message: "Delete failed" });
+  }
+}
+

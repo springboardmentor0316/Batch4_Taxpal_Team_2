@@ -64,8 +64,8 @@ export default function Transactions({ refreshTrigger, isDashboardView, onViewAl
     );
   }
 
-  return (
-  <div className="transactions">
+
+  const content = (
     <div className="transactions-container">
       <div className="transactions-header">
         <h3>{isDashboardView ? "Recent Transactions" : "All Transactions"}</h3>
@@ -108,6 +108,17 @@ export default function Transactions({ refreshTrigger, isDashboardView, onViewAl
         </table>
       </div>
     </div>
+  );
+
+  if (isDashboardView) {
+    // compact: only the container (no outer page margins)
+    return <div className="transactions-dashboard-preview">{content}</div>;
+  }
+
+  // full page view (standalone route) keeps existing outer wrapper
+  return (
+    <div className="transactions">
+      {content}
     </div>
   );
 }
