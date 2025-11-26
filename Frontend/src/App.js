@@ -6,6 +6,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import './styles/App.css';
 import './styles/Sidebar.css';
 import './styles/Dashboard.css';
+import './styles/Settings.css';
+import './styles/Budget.css';
+import './styles/TaxEstimator.css';
+import './styles/TaxCalendar.css';
+import './styles/Transaction.css';
+
 
 // Import components
 import Register from "./pages/Register";
@@ -21,6 +27,7 @@ import Home from "./pages/Home";
 import Transaction from "./pages/transaction";
 import TaxEstimator from "./pages/TaxEstimator";
 import TaxCalendar from "./pages/TaxCalendar";
+import Reports from "./pages/Reports";
 
 
 // Protected Route Component
@@ -92,6 +99,11 @@ function App() {
        <Route path="/transaction" element={
           <ProtectedRoute>
           <Transaction />
+        </ProtectedRoute>
+      } />
+         <Route path="/Reports" element={
+          <ProtectedRoute>
+          <Reports />
         </ProtectedRoute>
       } />
 

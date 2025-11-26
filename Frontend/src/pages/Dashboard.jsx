@@ -4,6 +4,7 @@ import Transactions from "../pages/transaction";
 import Graphs from "../pages/graphs";
 import RecordIncome from "../pages/RecordIncome";
 import RecordExpense from "../pages/RecordExpense";
+import Reports from "../pages/Reports";
 import "../styles/Dashboard.css";
 
 export default function Dashboard() {
@@ -14,9 +15,10 @@ export default function Dashboard() {
   const [summary, setSummary] = useState({ totalIncome: 0, totalExpense: 0, balance: 0 });
   const [loading, setLoading] = useState(true);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [showReports, setShowReports] = useState(false);
 
   useEffect(() => {
-    setViewAll(false); // ✅ Return to dashboard whenever page route changes
+    setViewAll(false);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -53,7 +55,6 @@ export default function Dashboard() {
 
   const handleSaveSuccess = () => setRefreshTrigger(prev => prev + 1);
 
-  // ✅ FULL TRANSACTION VIEW
   if (viewAll) {
     return (
       <div className="dashboard-container">
@@ -65,7 +66,6 @@ export default function Dashboard() {
     );
   }
 
-  // ✅ DASHBOARD VIEW
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
@@ -80,7 +80,6 @@ export default function Dashboard() {
         </div>
       </header>
 
-      {/* Summary Cards */}
       <section className="cards-row">
         <div className="summary-card"><h3 className="card-title">Monthly Income</h3><p className="card-value">{loading ? "Loading..." : `$${summary.totalIncome.toFixed(2)}`}</p></div>
         <div className="summary-card"><h3 className="card-title">Monthly Expenses</h3><p className="card-value">{loading ? "Loading..." : `$${summary.totalExpense.toFixed(2)}`}</p></div>
@@ -90,17 +89,17 @@ export default function Dashboard() {
 
       <Graphs refreshTrigger={refreshTrigger} />
 
-      {/* Recent Transactions preview */}
-      <section className="transactions-section" >
+      <section className="transactions-section">
         <Transactions 
           refreshTrigger={refreshTrigger}
           isDashboardView={true}
-          onViewAllClick={() => setViewAll(true)} // ✅ OPEN FULL PAGE
+          onViewAllClick={() => setViewAll(true)}
         />
       </section>
 
       {showIncome && <RecordIncome onClose={() => setShowIncome(false)} onSaveSuccess={handleSaveSuccess} />}
       {showExpense && <RecordExpense onClose={() => setShowExpense(false)} onSaveSuccess={handleSaveSuccess} />}
+      {showReports && <Reports totalIncome={summary.totalIncome} totalExpenses={summary.totalExpense} />}
     </div>
   );
 }
