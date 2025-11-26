@@ -131,14 +131,19 @@ export default function TaxEstimator() {
 
   const stateOptions = formData.country ? countryStates[formData.country] || [] : [];
 
+  // ----------------- render -----------------
   return (
     <div className="tax-estimator-container">
+
+      {/* Toast container for this page */}
+      <ToastContainer position="top-right" autoClose={3000} />
 
       <div className="page-header">
         <h1 className="title">Tax Estimator</h1>
         <p className="subtitle">Calculate your estimated tax obligations</p>
       </div>
 
+      {/* content-grid: left column (calculator), right column (summary) */}
       <div className="content-grid">
 
         <div className="calculator-card">
@@ -258,6 +263,58 @@ export default function TaxEstimator() {
           </div>
         </div>
 
+        {/* ===== History: placed inside the grid and constrained to left column so it sits below the calculator ===== */}
+        <div className="history-section left-column">
+          <h3 className="summary-heading">📘 Saved Tax Results</h3>
+          <p className="summary-sub">Your previously saved tax calculations</p>
+
+          {historyLoading ? (
+            <p>Loading history...</p>
+          ) : history.length === 0 ? (
+            <p>No saved tax results found.</p>
+          ) : (
+            <div className="history-table-wrapper">
+              <table className="history-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Annual Income</th>
+                    <th>Taxable Income</th>
+                    <th>Deductions</th>
+                    <th>Estimated Tax</th>
+                    <th>Quarterly Tax</th>
+                    <th>Region</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {history.map(record => (
+                    <tr key={record._id}>
+                      <td>{new Date(record.createdAt).toLocaleDateString()}</td>
+                      <td>${(record.annualIncome || 0).toLocaleString()}</td>
+                      <td>${(record.taxableIncome || 0).toLocaleString()}</td>
+                      <td>${(record.deductions || 0).toLocaleString()}</td>
+                      <td>${(record.estimatedTax || 0).toLocaleString()}</td>
+                      <td>${(record.estimatedQuarterlyTaxes || 0).toLocaleString()}</td>
+                      <td>{record.region}</td>
+                      <td>{record.status || '—'}</td>
+                      <td>
+                        <button
+                          className="history-delete-btn"
+                          title="Delete saved record"
+                          onClick={() => handleDeleteRecord(record._id)}
+                        >
+                          <FontAwesomeIcon icon={faTrashAlt} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

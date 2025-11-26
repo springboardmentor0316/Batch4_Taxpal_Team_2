@@ -69,4 +69,6 @@
   .form-row { flex-direction: column; }
   .actions-row { flex-direction: column; }
   .btn-save { width: 100%; }
+   .history-section.left-column { grid-column: 1 / -1; }
 }
+
