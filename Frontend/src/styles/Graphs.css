@@ -30,8 +30,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;   /* Two equal columns */
   gap: 24px;
-  background: #fff;
-  padding: 20px;
+  padding: 20px 0px;
   border-radius: 20px;
   margin-top: 20px;
 }

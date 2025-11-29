@@ -1,5 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/TaxEstimator.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 export default function TaxEstimator() {
   const [formData, setFormData] = useState({
@@ -18,6 +22,13 @@ export default function TaxEstimator() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const [saving, setSaving] = useState(false);
+  const [history, setHistory] = useState([]);
+  const [historyLoading, setHistoryLoading] = useState(true);
+
+  const API = window.API || process.env.REACT_APP_API || 'http://localhost:5000';
+
+  // ---------------- TAX FUNCTIONS ----------------
   function calculateIndiaTax(income) {
     if (income <= 300000) return 0;
     if (income <= 600000) return (income - 300000) * 0.05;
@@ -69,8 +80,9 @@ export default function TaxEstimator() {
     return income * 0.25;
   }
 
+  // ---------------- Utilities ----------------
   const sanitizeNumber = (value) => {
-    if (!value) return 0;
+    if (!value && value !== 0) return 0;
     const cleaned = String(value).replace(/[$, ]+/g, '').trim();
     const n = Number(cleaned);
     return Number.isFinite(n) ? n : 0;
@@ -81,11 +93,29 @@ export default function TaxEstimator() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  // ---------------- calculateTax with validation ----------------
   const calculateTax = () => {
     setLoading(true);
     setError('');
+
     try {
+      // validation: require country and grossIncome > 0
       const grossQuarter = sanitizeNumber(formData.grossIncome);
+      if (!formData.country) {
+        const msg = 'Please select a country/region.';
+        setError(msg);
+        toast.error(msg);
+        setLoading(false);
+        return;
+      }
+      if (grossQuarter <= 0) {
+        const msg = 'Please enter a valid gross income greater than 0.';
+        setError(msg);
+        toast.error(msg);
+        setLoading(false);
+        return;
+      }
+
       const annualIncome = grossQuarter * 4;
 
       const deductions =
@@ -101,15 +131,144 @@ export default function TaxEstimator() {
         taxable
       );
 
-      setResult({
+      const normalized = {
         taxable_income: taxable,
         estimated_tax: estimatedTax
-      });
+      };
 
+      setResult(normalized);
     } catch (err) {
       setError('Failed to calculate tax.');
+      toast.error('Failed to calculate tax.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // ---------------- History loader + save + delete ----------------
+  const loadHistory = async () => {
+    setHistoryLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) headers.Authorization = `Bearer ${token}`;
+
+      const res = await fetch(`${API}/api/tax/history`, { headers });
+      if (!res.ok) {
+        console.warn('Failed to fetch tax history', res.status);
+        setHistory([]);
+      } else {
+        const j = await res.json().catch(() => null);
+        const items = Array.isArray(j) ? j : (j?.data || []);
+        setHistory(items || []);
+      }
+    } catch (err) {
+      console.error('loadHistory error', err);
+      setHistory([]);
+    } finally {
+      setHistoryLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadHistory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const saveResult = async () => {
+    if (!result) {
+      toast.error('No result to save. Calculate first.');
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError('You must be logged in to save. Please login and try again.');
+      toast.error('You must be logged in to save. Please login and try again.');
+      return;
+    }
+
+    setSaving(true);
+    setError('');
+
+    // Compute deductions more reliably (annual - taxable)
+    const inputAnnualIncome = sanitizeNumber(formData.grossIncome) * 4;
+    const computedDeductions = Math.max(0, inputAnnualIncome - result.taxable_income);
+
+    const payload = {
+      annualIncome: inputAnnualIncome,
+      taxableIncome: result.taxable_income,
+      deductions: computedDeductions,
+      estimatedTax: result.estimated_tax,
+      estimatedQuarterlyTaxes: Math.round((result.estimated_tax || 0) / 4),
+      region: formData.country || '',
+      status: formData.filingStatus || ''   // <--- include filingStatus so saved rows have status
+    };
+
+    try {
+      const resp = await fetch(`${API}/api/tax/save`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const jText = await resp.text().catch(() => '');
+      let j = null;
+      try { j = jText ? JSON.parse(jText) : null; } catch { j = null; }
+
+      console.log('[saveResult] status', resp.status, 'body', j || jText);
+
+      if (resp.ok) {
+        toast.success(j?.message || 'Saved successfully!');
+        await loadHistory();
+        return;
+      } else {
+        const serverMsg = j?.error || j?.message || jText || `Server error (${resp.status})`;
+        toast.error(serverMsg);
+        setError(serverMsg);
+      }
+    } catch (err) {
+      console.error('[saveResult] error', err);
+      toast.error('Network error: failed to save.');
+      setError(err.message || 'Network error');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDeleteRecord = async (id) => {
+    if (!id) return;
+    const confirmed = window.confirm("Do you really want to delete this saved tax record?");
+    if (!confirmed) return;
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      toast.error('You must be logged in to delete records.');
+      return;
+    }
+
+    try {
+      const resp = await fetch(`${API}/api/tax/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const j = await resp.json().catch(() => null);
+      if (resp.ok) {
+        toast.success(j?.message || 'Deleted successfully');
+        await loadHistory();
+      } else {
+        toast.error(j?.message || 'Delete failed');
+      }
+    } catch (err) {
+      console.error('delete error', err);
+      toast.error('Delete failed due to network or server error');
     }
   };
 
@@ -132,6 +291,8 @@ export default function TaxEstimator() {
 
   return (
     <div className="tax-estimator-container">
+      <ToastContainer position="top-right" autoClose={3000} />
+
       <div className="page-header">
         <h1 className="title">Tax Estimator</h1>
         <p className="subtitle">Calculate your estimated tax obligations</p>
@@ -215,8 +376,17 @@ export default function TaxEstimator() {
           </div>
 
           <div className="actions-row">
-            <button className="btn-calculate primary" onClick={calculateTax}>
+            <button className="btn-calculate primary" onClick={calculateTax} disabled={loading}>
               {loading ? "Calculating..." : "📊 Calculate Estimated Tax"}
+            </button>
+
+            <button
+              className="btn-save"
+              onClick={saveResult}
+              disabled={!result || saving}
+              title={!result ? "Calculate first to save" : "Save result"}
+            >
+              {saving ? 'Saving...' : '💾 Save Result'}
             </button>
           </div>
 
@@ -251,6 +421,60 @@ export default function TaxEstimator() {
               </div>
             )}
           </div>
+        </div>
+      </div>
+
+      <div className="history-section ">
+        <div className="history-inner">
+          <h3 className="summary-heading">📘 Saved Tax Results</h3>
+          <p className="summary-sub">Your previously saved tax calculations</p>
+
+          {historyLoading ? (
+            <p>Loading history...</p>
+          ) : history.length === 0 ? (
+            <p>No saved tax results found.</p>
+          ) : (
+            <div className="history-table-wrapper">
+              <table className="history-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Annual Income</th>
+                    <th>Taxable Income</th>
+                    <th>Deductions</th>
+                    <th>Estimated Tax</th>
+                    <th>Quarterly Tax</th>
+                    <th>Region</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {history.map(record => (
+                    <tr key={record._id || record.id || record.createdAt}>
+                      <td>{record.createdAt ? new Date(record.createdAt).toLocaleDateString() : '—'}</td>
+                      <td>{(record.annualIncome || record.annualIncome === 0) ? Number(record.annualIncome).toLocaleString() : '—'}</td>
+                      <td>{(record.taxableIncome || record.taxableIncome === 0) ? Number(record.taxableIncome).toLocaleString() : '—'}</td>
+                      <td>{(record.deductions || record.deductions === 0) ? Number(record.deductions).toLocaleString() : '—'}</td>
+                      <td>{(record.estimatedTax || record.estimatedTax === 0) ? Number(record.estimatedTax).toLocaleString() : '—'}</td>
+                      <td>{(record.estimatedQuarterlyTaxes || record.estimatedQuarterlyTaxes === 0) ? Number(record.estimatedQuarterlyTaxes).toLocaleString() : '—'}</td>
+                      <td>{record.region || record.country || '—'}</td>
+                      <td>{record.status || '—'}</td>
+                      <td>
+                        <button
+                          className="history-delete-btn"
+                          title="Delete saved record"
+                          onClick={() => handleDeleteRecord(record._id || record.id)}
+                        >
+                          <FontAwesomeIcon icon={faTrashAlt} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
     </div>

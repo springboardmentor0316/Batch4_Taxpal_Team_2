@@ -30,6 +30,8 @@
   overflow-x: hidden;
 }
 
+
+
 /* For smaller screens (when sidebar collapses) */
 @media (max-width: 992px) {
   .dashboard-container {

@@ -6,6 +6,7 @@ export const recordIncome = async (req, res) => {
   try {
     const { description, amount, category, date, notes } = req.body;
     const userId = req.userId;
+    if (!userId) return res.status(401).json({ success: false, error: "Not authenticated" });
 
     if (!description || !amount || !category || !date) {
       return res.status(400).json({ success: false, error: "Please provide all required fields: description, amount, category, and date" });
@@ -38,6 +39,7 @@ export const recordExpense = async (req, res) => {
   try {
     const { description, amount, category, date, notes } = req.body;
     const userId = req.userId;
+    if (!userId) return res.status(401).json({ success: false, error: "Not authenticated" });
 
     if (!description || !amount || !category || !date) {
       return res.status(400).json({ success: false, error: "Please provide all required fields: description, amount, category, and date" });
@@ -66,17 +68,44 @@ export const recordExpense = async (req, res) => {
   }
 };
 
+/**
+ * GET /api/transactions?startDate=...&endDate=...&type=...&limit=...&skip=...
+ */
 export const getTransactions = async (req, res) => {
   try {
     const userId = req.userId;
-    const { type, limit = 10, skip = 0 } = req.query;
-    const query = { userId };
+    if (!userId) return res.status(401).json({ success: false, error: "Not authenticated" });
+
+    const { type, limit = 100, skip = 0, startDate, endDate } = req.query;
+    const query = { userId: new mongoose.Types.ObjectId(userId) };
+
     if (type && (type === "income" || type === "expense")) query.type = type;
 
-    const transactions = await Transaction.find(query).sort({ date: -1, createdAt: -1 }).limit(parseInt(limit)).skip(parseInt(skip));
+    // date filtering (inclusive)
+    if (startDate || endDate) {
+      const dateQuery = {};
+      if (startDate) {
+        const s = new Date(startDate);
+        if (!isNaN(s.getTime())) dateQuery.$gte = s;
+      }
+      if (endDate) {
+        const e = new Date(endDate);
+        if (!isNaN(e.getTime())) dateQuery.$lte = e;
+      }
+      if (Object.keys(dateQuery).length) query.date = dateQuery;
+    }
+
+    const numericLimit = Math.max(0, parseInt(limit, 10) || 0);
+    const numericSkip = Math.max(0, parseInt(skip, 10) || 0);
+
+    let q = Transaction.find(query).sort({ date: -1, createdAt: -1 });
+    if (numericLimit > 0) q = q.limit(numericLimit);
+    if (numericSkip > 0) q = q.skip(numericSkip);
+
+    const transactions = await q.exec();
     const total = await Transaction.countDocuments(query);
 
-    res.status(200).json({ success: true, data: transactions, pagination: { total, limit: parseInt(limit), skip: parseInt(skip) } });
+    res.status(200).json({ success: true, data: transactions, pagination: { total, limit: numericLimit, skip: numericSkip } });
   } catch (error) {
     console.error("Error fetching transactions:", error);
     res.status(500).json({ success: false, error: "Failed to fetch transactions" });
@@ -86,8 +115,10 @@ export const getTransactions = async (req, res) => {
 export const getRecentTransactions = async (req, res) => {
   try {
     const userId = req.userId;
-    const limit = parseInt(req.query.limit) || 5;
-    const transactions = await Transaction.find({ userId }).sort({ date: -1, createdAt: -1 }).limit(limit);
+    if (!userId) return res.status(401).json({ success: false, error: "Not authenticated" });
+
+    const limit = Math.max(1, parseInt(req.query.limit, 10) || 5);
+    const transactions = await Transaction.find({ userId: new mongoose.Types.ObjectId(userId) }).sort({ date: -1, createdAt: -1 }).limit(limit);
 
     res.status(200).json({ success: true, data: transactions });
   } catch (error) {
@@ -99,17 +130,26 @@ export const getRecentTransactions = async (req, res) => {
 export const getTransactionSummary = async (req, res) => {
   try {
     const userId = req.userId;
+    if (!userId) return res.status(401).json({ success: false, error: "Not authenticated" });
+
     const { startDate, endDate } = req.query;
-    const start = startDate ? new Date(startDate) : null;
-    const end = endDate ? new Date(endDate) : null;
+    let match = { userId: new mongoose.Types.ObjectId(userId) };
+
+    if (startDate || endDate) {
+      const dateQuery = {};
+      if (startDate) {
+        const s = new Date(startDate);
+        if (!isNaN(s.getTime())) dateQuery.$gte = s;
+      }
+      if (endDate) {
+        const e = new Date(endDate);
+        if (!isNaN(e.getTime())) dateQuery.$lte = e; // inclusive upper bound
+      }
+      if (Object.keys(dateQuery).length) match.date = dateQuery;
+    }
 
     const summary = await Transaction.aggregate([
-      {
-        $match: {
-          userId: new mongoose.Types.ObjectId(userId),
-          ...(start && end ? { date: { $gte: start, $lt: end } } : {})
-        },
-      },
+      { $match: match },
       { $group: { _id: "$type", total: { $sum: "$amount" } } },
     ]);
 
@@ -126,9 +166,10 @@ export const getTransactionSummary = async (req, res) => {
 export const deleteTransaction = async (req, res) => {
   try {
     const userId = req.userId;
-    const { id } = req.params;
+    if (!userId) return res.status(401).json({ success: false, error: "Not authenticated" });
 
-    const transaction = await Transaction.findOneAndDelete({ _id: id, userId });
+    const { id } = req.params;
+    const transaction = await Transaction.findOneAndDelete({ _id: id, userId: new mongoose.Types.ObjectId(userId) });
 
     if (!transaction) {
       return res.status(404).json({ success: false, error: "Transaction not found" });

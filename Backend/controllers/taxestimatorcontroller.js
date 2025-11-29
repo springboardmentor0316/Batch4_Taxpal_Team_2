@@ -1,6 +1,7 @@
 // controllers/taxestimatorcontroller.js
-import Tax from "../models/taxestimator.js";
+import Tax from "../models/Taxestimator.js";
 
+/* ---------- tax calculation helpers ---------- */
 function calculateIndiaTax(income) {
   if (income <= 300000) return 0;
   if (income <= 600000) return (income - 300000) * 0.05;
@@ -51,54 +52,82 @@ function calculateTaxByRegion(region, income) {
   }
 }
 
+/* ---------- controller methods ---------- */
+
 export async function calc(req, res) {
   try {
     const body = req.body || {};
-    const incomeQuarter = Number(body.income || 0);
+
+    // Accept flexible input names:
+    // - quarterly gross may be provided as: income, grossIncome, grossQuarter
+    // - or the client may send annualIncome already
+    const incomeQuarter =
+      Number(body.income ?? body.grossIncome ?? body.grossQuarter ?? 0);
     const annualFromQuarter = incomeQuarter * 4;
     const annual = Number(body.annualIncome ?? annualFromQuarter ?? 0);
 
+    // Accept deductions either as a nested `deductions` object OR as top-level fields
+    const deductionsObj = body.deductions || {};
+    const businessExpenses =
+      Number(deductionsObj.businessExpenses ?? body.businessExpenses ?? 0);
+    const retirementContributions =
+      Number(deductionsObj.retirementContributions ?? body.retirementContributions ?? 0);
+    const healthInsurance =
+      Number(deductionsObj.healthInsurance ?? body.healthInsurance ?? 0);
+    const homeOfficeDeduction =
+      Number(deductionsObj.homeOfficeDeduction ?? body.homeOfficeDeduction ?? 0);
+
     const deductionsSum =
-      Number(body?.deductions?.businessExpenses || 0) +
-      Number(body?.deductions?.retirementContributions || 0) +
-      Number(body?.deductions?.healthInsurance || 0) +
-      Number(body?.deductions?.homeOfficeDeduction || 0);
+      businessExpenses + retirementContributions + healthInsurance + homeOfficeDeduction;
 
     const taxableIncome = Math.max(annual - deductionsSum, 0);
-    const region = body.country || body.region || "";
+
+    // region may be passed as country or region
+    const region = (body.country || body.region || "").toString();
+
     const tax = calculateTaxByRegion(region, taxableIncome);
 
+    // Return keys that match your frontend naming (taxable_income, estimated_tax)
     return res.json({
-      ok: true,
+      success: true,
       result: {
-        taxable: taxableIncome,
-        tax,
+        taxable_income: taxableIncome,
+        estimated_tax: tax,
       },
     });
   } catch (err) {
     console.error("calc error", err);
-    return res.status(500).json({ ok: false, error: "Server error" });
+    return res.status(500).json({ success: false, error: "Server error" });
   }
 }
 
 export async function save(req, res) {
   try {
     const payload = req.body || {};
+
+    // Coerce numeric fields safely
+    const annualIncome = Number(payload.annualIncome ?? 0);
+    const deductions = Number(payload.deductions ?? 0);
+    const taxableIncome = Number(payload.taxableIncome ?? 0);
+    const estimatedQuarterlyTaxes = Number(payload.estimatedQuarterlyTaxes ?? 0);
+    const estimatedTax = Number(payload.estimatedTax ?? 0);
+
     const doc = new Tax({
       userId: req.userId || null,
-      annualIncome: payload.annualIncome || 0,
-      deductions: payload.deductions || 0,
-      taxableIncome: payload.taxableIncome || 0,
-      estimatedQuarterlyTaxes: payload.estimatedQuarterlyTaxes || 0,
-      estimatedTax: payload.estimatedTax || 0,
+      annualIncome,
+      deductions,
+      taxableIncome,
+      estimatedQuarterlyTaxes,
+      estimatedTax,
       region: payload.region || "",
       status: payload.status || "",
     });
+
     const saved = await doc.save();
-    return res.status(201).json({ success: true, data: saved });
+    return res.status(201).json({ success: true, data: saved, message: "Saved successfully" });
   } catch (err) {
     console.error("save error", err);
-    return res.status(500).json({ ok: false, error: "Failed to save" });
+    return res.status(500).json({ success: false, error: "Failed to save" });
   }
 }
 
@@ -119,11 +148,11 @@ export async function update(req, res) {
     const id = req.params.id;
     const body = req.body || {};
     const updated = await Tax.findByIdAndUpdate(id, body, { new: true });
-    if (!updated) return res.status(404).json({ ok: false, error: "Not found" });
+    if (!updated) return res.status(404).json({ success: false, error: "Not found" });
     return res.json({ success: true, data: updated });
   } catch (err) {
     console.error("update error", err);
-    return res.status(500).json({ ok: false, error: "Update failed" });
+    return res.status(500).json({ success: false, error: "Update failed" });
   }
 }
 
@@ -133,7 +162,7 @@ export async function remove(req, res) {
     const doc = await Tax.findById(id);
     if (!doc) return res.status(404).json({ success: false, message: "Not found" });
 
-    // If your save stores userId, ensure only owner can delete:
+    // Ensure only owner can delete (if userId exists)
     if (req.userId && doc.userId && String(doc.userId) !== String(req.userId)) {
       return res.status(403).json({ success: false, message: "Not authorized" });
     }
@@ -145,4 +174,3 @@ export async function remove(req, res) {
     return res.status(500).json({ success: false, message: "Delete failed" });
   }
 }
-

@@ -1,14 +1,17 @@
-import React, { useState, useEffect , useCallback} from "react";
+// src/components/Transactions.jsx
+import React, { useState, useEffect, useCallback } from "react";
 import "../styles/Transaction.css";
 
-export default function Transactions({ refreshTrigger, isDashboardView, onViewAllClick }) {
+export default function Transactions({
+  refreshTrigger,
+  isDashboardView,
+  insideDashboard = false,
+  onViewAllClick = () => {}
+}) {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  
-
-
-  const fetchTransactions = useCallback( async () => {
+  const fetchTransactions = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
@@ -18,7 +21,7 @@ export default function Transactions({ refreshTrigger, isDashboardView, onViewAl
         : "http://localhost:5000/api/transactions"; // Fetch ALL when not dashboard view
 
       const response = await fetch(endpoint, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` }
       });
 
       if (response.ok) {
@@ -30,7 +33,7 @@ export default function Transactions({ refreshTrigger, isDashboardView, onViewAl
     } finally {
       setLoading(false);
     }
-  } , [isDashboardView]);
+  }, [isDashboardView]);
 
   useEffect(() => {
     fetchTransactions();
@@ -40,7 +43,7 @@ export default function Transactions({ refreshTrigger, isDashboardView, onViewAl
     new Date(dateString).toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
-      year: "numeric",
+      year: "numeric"
     });
 
   const formatAmount = (amount, type) =>
@@ -49,7 +52,9 @@ export default function Transactions({ refreshTrigger, isDashboardView, onViewAl
   if (loading) {
     return (
       <div className="transactions-container">
-        <p style={{ textAlign: "center", padding: "20px" }}>Loading transactions...</p>
+        <p style={{ textAlign: "center", padding: "20px" }}>
+          Loading transactions...
+        </p>
       </div>
     );
   }
@@ -63,7 +68,6 @@ export default function Transactions({ refreshTrigger, isDashboardView, onViewAl
       </div>
     );
   }
-
 
   const content = (
     <div className="transactions-container">
@@ -94,11 +98,21 @@ export default function Transactions({ refreshTrigger, isDashboardView, onViewAl
                 <td>{formatDate(t.date)}</td>
                 <td>{t.description}</td>
                 <td>{t.category}</td>
-                <td className={t.type === "income" ? "amount-positive" : "amount-negative"}>
+                <td
+                  className={
+                    t.type === "income" ? "amount-positive" : "amount-negative"
+                  }
+                >
                   {formatAmount(t.amount, t.type)}
                 </td>
                 <td>
-                  <span className={`type-badge ${t.type === "income" ? "badge-income" : "badge-expense"}`}>
+                  <span
+                    className={`type-badge ${
+                      t.type === "income"
+                        ? "badge-income"
+                        : "badge-expense"
+                    }`}
+                  >
                     {t.type.charAt(0).toUpperCase() + t.type.slice(1)}
                   </span>
                 </td>
@@ -110,15 +124,16 @@ export default function Transactions({ refreshTrigger, isDashboardView, onViewAl
     </div>
   );
 
+  // --- Dashboard view (compact) ---
   if (isDashboardView) {
-    // compact: only the container (no outer page margins)
     return <div className="transactions-dashboard-preview">{content}</div>;
   }
 
-  // full page view (standalone route) keeps existing outer wrapper
-  return (
-    <div className="transactions">
-      {content}
-    </div>
-  );
+  // --- Full page view ---
+ return (
+  <div className={insideDashboard ? "transactions-inside-dashboard" : "transactions"}>
+    {content}
+  </div>
+);
+
 }
