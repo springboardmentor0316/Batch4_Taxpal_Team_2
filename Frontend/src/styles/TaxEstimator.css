@@ -1,0 +1,176 @@
+:root {
+  --bg: #f9fafc;
+  --card-bg: #ffffff;
+  --muted: #6b7280;
+  --primary: #2563eb;
+  --primary-600: #1d4ed8;
+  --accent: #10b981; /* your light green accent */
+  --accent-hover: #0ea06f; /* slightly darker green for hover */
+  --accent-disabled: #9be6c2; /* light muted green for disabled */
+  --accent-disabled-hover: #8bd8ac; /* slightly darker disabled hover */
+  --heading: #1f2937;
+  --brand: #1b3b7d;
+}
+
+.tax-estimator-container {
+  padding: 20px;
+  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  color: var(--heading);
+  background: var(--bg);
+  min-height: 100vh;
+  box-sizing: border-box;
+  max-width: 1400px;
+  margin-left: 270px;
+}
+
+.page-header { text-align: left; margin-bottom: 24px; }
+.page-header .title { font-size: 2rem; font-weight: 600; color: var(--heading); }
+.page-header .subtitle { color: var(--muted); margin-top: 4px; font-size: 1rem; }
+
+.content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; align-items: start; grid-auto-rows: auto; }
+
+.calculator-card, .summary-card.intro {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.section-heading { font-size: 1.25rem; font-weight: 600; margin-bottom: 12px; color: var(--heading); }
+.sub-heading { margin-top: 18px; font-size: 1rem; font-weight: 600; color: var(--heading); }
+
+.form-row { display: flex; gap: 16px; margin-bottom: 8px; }
+.form-group { flex: 1; display: flex; flex-direction: column; margin-bottom: 12px; }
+.form-group label { font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 6px; }
+.form-group input, .form-group select {
+  padding: 10px 12px; border-radius: 6px; border: 1px solid #d1d5db; background: #f9fafb; font-size: 0.95rem;
+}
+.form-group input:focus, .form-group select:focus {
+  outline: none; border-color: var(--brand); background: #fff;
+}
+
+.actions-row { display: flex; gap: 12px; margin-top: 18px; align-items:center; }
+.btn-calculate { flex: 1; padding: 0.85rem; border: none; border-radius: 8px; font-size: 1rem; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; background-color: var(--primary); color: white; transition: background 0.12s ease; }
+.btn-calculate.primary:hover { background-color: var(--primary-600); }
+
+/* SAVE BUTTON - more specific rules using :enabled / :disabled for reliability */
+.btn-save {
+  width: 160px;
+  padding: 0.85rem;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.14s ease, opacity 0.12s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-appearance: none; /* avoid platform default styles */
+  appearance: none;
+}
+
+/* enabled state (explicit) */
+.btn-save:enabled {
+  background-color: var(--accent);
+  cursor: pointer;
+}
+
+/* enabled hover */
+.btn-save:enabled:hover {
+  background-color: var(--accent-hover);
+}
+
+/* disabled state */
+.btn-save:disabled {
+  background-color: var(--accent-disabled);
+  cursor: not-allowed;
+  opacity: 0.95;
+}
+
+/* disabled hover (slightly darker, still disabled) */
+.btn-save:disabled:hover {
+  background-color: var(--accent-disabled-hover);
+  cursor: not-allowed;
+}
+
+.error-text { color: red; margin-top: 12px; }
+
+.summary-heading { font-size: 1.125rem; font-weight: 600; color: var(--heading); margin-bottom: 6px; }
+.summary-sub { font-size: 0.875rem; color: var(--muted); margin-bottom: 16px; }
+.placeholder-content { padding: 32px 0; color: #9ca3af; text-align: center; }
+.calculator-icon { font-size: 3rem; color: var(--brand); margin-bottom: 8px; }
+.result-card { background: var(--card-bg); border-radius: 10px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.result-row { display: flex; justify-content: space-between; margin-bottom: 8px; align-items: center; }
+.result-note { margin-top: 8px; color: var(--muted); font-size: 0.875rem; }
+
+/* History */
+.history-inner {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  margin-top: 24px;
+}
+
+.history-table-wrapper {
+  margin-top: 12px;
+  overflow-x: auto;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.history-table th {
+  background: #f3f4f6;
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 13px;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.history-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.history-table tr:hover {
+  background: #f9fafb;
+}
+
+.history-delete-btn {
+  background: transparent;
+  color: #ef4444;
+  border: 1px solid rgba(239,68,68,0.12);
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s, transform 0.08s;
+}
+
+.history-delete-btn:hover {
+  background: rgba(239,68,68,0.08);
+  transform: translateY(-1px);
+}
+
+.history-delete-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .content-grid { grid-template-columns: 1fr; }
+  .form-row { flex-direction: column; }
+  .actions-row { flex-direction: column; }
+  .btn-save { width: 100%; }
+  .history-section.left-column { grid-column: 1 / -1; }
+}

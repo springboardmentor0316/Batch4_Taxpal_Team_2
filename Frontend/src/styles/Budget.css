@@ -101,7 +101,7 @@
   flex: 1; /* Distribute space evenly among cards */
   min-width: 250px; 
   padding: 30px 25px; 
-  background-color: #f8fafcff;
+  background-color: #ffffff;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   transition: background-color 0.2s; /* Smooth hover effect */

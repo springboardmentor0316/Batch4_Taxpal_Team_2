@@ -1,0 +1,295 @@
+/* src/styles/TaxCalendar.css */
+
+/* ===========================
+   Tax Calendar – Container
+   =========================== */
+.tax-calendar-container {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #f5f5f5;
+  min-height: 100vh;
+  margin: 0px 0px 0px 270px;
+  padding: 20px;
+}
+
+/* ===========================
+   Header
+   =========================== */
+.tax-calendar-header {
+  margin-bottom: 32px;
+}
+
+.tax-calendar-header h1 {
+  font-size: 32px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.tax-calendar-header p {
+  font-size: 16px;
+  color: #666;
+}
+
+/* ===========================
+   Layout: Sidebar + Content
+   =========================== */
+.tax-calendar-layout {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 24px;
+}
+
+/* ===========================
+   Left: Month Selector Panel
+   =========================== */
+.month-panel {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  height: auto;
+}
+
+.month-panel-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #1a1a1a;
+}
+
+.month-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.month-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  background: transparent;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.month-button:hover {
+  background: #f5f5f5;
+}
+
+.month-button-active {
+  background: #1a1a1a;
+  color: white;
+}
+
+.month-count {
+  padding: 2px 10px;
+  border-radius: 12px;
+  background: #e0e0e0;
+  color: #666;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.month-count-active {
+  background: white;
+  color: #1a1a1a;
+}
+
+/* ===========================
+   Right: Events Panel
+   =========================== */
+.events-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.events-header h2 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+/* Event card */
+.event-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  gap: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  align-items: flex-start;
+}
+
+.event-icon {
+  font-size: 24px;
+  margin-top: 4px;
+}
+
+.event-info {
+  flex: 1;
+}
+
+.event-info h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.event-tag {
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+/* Tag variants */
+.event-tag-reminder {
+  background: #E0F2FE;
+  color: #0369A1;
+}
+
+.event-tag-payment {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+.event-desc {
+  font-size: 15px;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.event-date {
+  font-size: 14px;
+  color: #999;
+  margin-bottom: 8px;
+}
+
+/* ===========================
+   Payment badge variants (utility classes)
+   =========================== */
+.badge-green {
+  border: 2px solid #059669;
+  background: #10B981;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-weight: 600;
+}
+
+.badge-red {
+  border: 2px solid #dc2626;
+  background: #ef4444;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-weight: 600;
+}
+
+.badge-orange {
+  border: 2px solid #f97316;
+  background: #f97316;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-weight: 600;
+}
+
+.badge-yellow {
+  border: 2px solid #b45309;
+  background: #f59e0b;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-weight: 600;
+}
+
+/* ===========================
+   Quarterly Payment Schedule
+   =========================== */
+.schedule-card {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.schedule-quarter-badge {
+  background: #FEF3C7;
+  color: #92400E;
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ===========================
+   Payment Confirmation Modal
+   =========================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+
+.modal-box {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  width: 320px;
+  text-align: center;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.modal-btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+}
+
+.modal-btn-no {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.modal-btn-yes {
+  background: #2563eb;
+  color: white;
+}
+
+/* ===========================
+   Responsive tweaks
+   =========================== */
+@media (max-width: 900px) {
+  .tax-calendar-layout {
+    grid-template-columns: 1fr;
+  }
+  .month-panel {
+    order: 2;
+  }
+}

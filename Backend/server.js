@@ -1,39 +1,67 @@
-import express from "express";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-import cors from "cors";
-import userRoutes from "./routes/userRoutes.js";
-import authRoutes from "./routes/authRoutes.js";
-import transactionRoutes from "./routes/transactionRoutes.js";
-import budgetRoutes from "./routes/budgetRoutes.js";
-import categoryRoutes from "./routes/categoryRoutes.js";
-dotenv.config();
-const app = express();
+// server.js
+import "dotenv/config";
+import http from "http";
+import path from "path";
+import fs from "fs";
+import app from "./app.js";
+import { connectAll, gracefulShutdown } from "./config/db.js";
 
-// Middleware
-app.use(cors());
-app.use(express.json()); // ✅ replaces bodyParser.json()
-
-// MongoDB Connection (clean)
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("✅ MongoDB Connected");
-    console.log(`📦 Using database: ${mongoose.connection.name}`);
-  })
-  .catch((err) => console.error("❌ MongoDB Error:", err));
-
-// Routes
-app.use("/api/user", userRoutes)
-app.use("/api/auth", authRoutes);
-app.use("/api/transactions", transactionRoutes);
-app.use("/api/budgets", budgetRoutes);
-app.use("/api/categories", categoryRoutes);
-// Health check
-app.get("/", (req, res) => {
-  res.json({ message: "TaxPal API is running" });
-});
-
-// Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017";
+const MONGO_DB = process.env.MONGO_DB || "taxpal";
+
+async function start() {
+  try {
+    await connectAll({ uri: MONGO_URI, dbName: MONGO_DB });
+    console.log("✅ Connected to MongoDB (Mongoose + Native client)");
+  } catch (err) {
+    console.error("❌ DB connection failed at startup:", err.message || err);
+    // Continue starting server even if DB connection failed for dev/debug convenience
+  }
+
+  const server = http.createServer(app);
+
+  server.listen(PORT, () => {
+    console.log(`🚀 Server listening on http://localhost:${PORT} (env: ${process.env.NODE_ENV || "dev"})`);
+  });
+
+  let shuttingDown = false;
+  async function shutdown(signal) {
+    if (shuttingDown) return;
+    shuttingDown = true;
+    console.log(`\n${signal} received — shutting down gracefully...`);
+
+    server.close(async (err) => {
+      if (err) console.error("Error closing HTTP server:", err);
+      try {
+        await gracefulShutdown();
+        console.log("✅ DB connections closed.");
+      } catch (e) {
+        console.error("Error during DB gracefulShutdown:", e);
+      }
+      console.log("Shutdown complete.");
+      process.exit(0);
+    });
+
+    setTimeout(() => {
+      console.error("Forcing shutdown after timeout.");
+      process.exit(1);
+    }, 10000).unref();
+  }
+
+  process.on("SIGINT", () => shutdown("SIGINT"));
+  process.on("SIGTERM", () => shutdown("SIGTERM"));
+
+  process.on("uncaughtException", (err) => {
+    console.error("uncaughtException:", err);
+    shutdown("uncaughtException");
+  });
+  process.on("unhandledRejection", (reason) => {
+    console.error("unhandledRejection:", reason);
+  });
+}
+
+start().catch((err) => {
+  console.error("Failed to start server:", err);
+  process.exit(1);
+});

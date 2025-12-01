@@ -14,10 +14,10 @@ import '../styles/Sidebar.css';
 
 const items = [
   { to: "/Dashboard", label: "Dashboard", icon: <FaTachometerAlt /> },
-  { to: "/transactions", label: "Transactions", icon: <FaExchangeAlt /> },
+  { to: "/transaction", label: "Transactions", icon: <FaExchangeAlt /> },
   { to: "/Budget", label: "Budgets", icon: <FaRegChartBar /> },
-  { to: "/tax-estimator", label: "Tax Estimator", icon: <FaFileInvoiceDollar /> },
-  { to: "/tax-calendar", label: "Tax Calendar", icon: <FaCalendarAlt /> },
+  { to: "/TaxEstimator", label: "Tax Estimator", icon: <FaFileInvoiceDollar /> },
+  { to: "/TaxCalendar", label: "Tax Calendar", icon: <FaCalendarAlt /> },
   { to: "/reports", label: "Reports", icon: <FaFolderOpen /> },
 ];
 

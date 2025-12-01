@@ -23,52 +23,85 @@ export default function Graphs({ refreshTrigger }) {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshTrigger]); // refresh charts when transactions change
 
   const fetchData = async () => {
     try {
       const token = localStorage.getItem("token");
+      if (!token) {
+        setBarData([]);
+        setPieData([]);
+        return;
+      }
+
       const res = await axios.get("http://localhost:5000/api/transactions", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      const transactions = res.data.data;
+      const transactions = Array.isArray(res?.data?.data) ? res.data.data : [];
 
       // ---- Bar Chart (Income vs Expenses per Month) ----
-      const grouped = {};
+      // Group by year-month so different years don't collide and we can sort chronologically
+      const grouped = {}; // key = "YYYY-MM"
       transactions.forEach((t) => {
-        const month = new Date(t.date).toLocaleString("default", { month: "short" });
-        if (!grouped[month]) grouped[month] = { name: month, income: 0, expense: 0 };
+        const dateVal = t.date || t.createdAt;
+        if (!dateVal) return;
+        const d = new Date(dateVal);
+        if (isNaN(d.getTime())) return;
 
-        if (t.type === "income") grouped[month].income += t.amount;
-        else grouped[month].expense += t.amount;
+        const year = d.getFullYear();
+        const monthIndex = d.getMonth(); // 0..11
+        const key = `${year}-${String(monthIndex + 1).padStart(2, "0")}`; // e.g. "2025-09"
+        const label = d.toLocaleString("default", { month: "short", year: "numeric" }); // e.g. "Sep 2025"
+
+        if (!grouped[key]) {
+          grouped[key] = {
+            key,
+            monthIndex,
+            year,
+            name: label,
+            income: 0,
+            expense: 0,
+          };
+        }
+
+        const amount = Number(t.amount || 0);
+        if (t.type === "income") grouped[key].income += amount;
+        else grouped[key].expense += amount;
       });
 
-      setBarData(Object.values(grouped));
+      // Convert to array and sort chronologically (oldest -> newest)
+      const sortedMonths = Object.values(grouped).sort((a, b) => {
+        if (a.year !== b.year) return a.year - b.year;
+        return a.monthIndex - b.monthIndex;
+      });
+
+      setBarData(sortedMonths.map(({ name, income, expense }) => ({ name, income, expense })));
 
       // ---- Pie Chart (Expense Breakdown by Category) ----
       const expenseGroups = {};
-      transactions
-        .filter((t) => t.type === "expense")
-        .forEach((t) => {
-          if (!expenseGroups[t.category]) expenseGroups[t.category] = 0;
-          expenseGroups[t.category] += t.amount;
-        });
+      transactions.forEach((t) => {
+        if (t.type !== "expense") return;
+        const cat = t.category || "Other";
+        expenseGroups[cat] = (expenseGroups[cat] || 0) + Number(t.amount || 0);
+      });
 
-      const formattedPieData = Object.entries(expenseGroups).map(
-        ([name, value]) => ({ name, value })
-      );
+      const formattedPieData = Object.entries(expenseGroups).map(([name, value]) => ({
+        name,
+        value,
+      }));
 
       setPieData(formattedPieData);
-
     } catch (error) {
       console.error("Error fetching chart data:", error);
+      setBarData([]);
+      setPieData([]);
     }
   };
 
   return (
-    <section className="charts-row" >
-
+    <section className="charts-row">
       {/* Bar Chart */}
       <div className="chart-panel" style={{ flex: 1, minWidth: "300px", marginLeft: "20px" }}>
         <div className="panel-header">
@@ -80,7 +113,7 @@ export default function Graphs({ refreshTrigger }) {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
-              <Tooltip />
+              <Tooltip formatter={(value) => `$${Number(value || 0).toFixed(2)}`} />
               <Legend />
               <Bar dataKey="income" fill="#10B981" name="Income" />
               <Bar dataKey="expense" fill="#EF4444" name="Expenses" />
@@ -108,20 +141,26 @@ export default function Graphs({ refreshTrigger }) {
                   <Cell key={i} fill={COLORS[i % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip formatter={(value) => `$${Number(value || 0).toFixed(2)}`} />
             </PieChart>
           </ResponsiveContainer>
           <ul style={{ listStyle: "none", paddingTop: "8px" }}>
             {pieData.map((d, i) => (
               <li key={i} style={{ display: "flex", alignItems: "center", gap: "6px", marginTop: "8px" }}>
-                <span style={{ width: "12px", height: "12px", borderRadius: "50%", background: COLORS[i % COLORS.length] }} />
-                {d.name} — ${d.value.toFixed(2)}
+                <span
+                  style={{
+                    width: "12px",
+                    height: "12px",
+                    borderRadius: "50%",
+                    background: COLORS[i % COLORS.length],
+                  }}
+                />
+                {d.name} — ${Number(d.value || 0).toFixed(2)}
               </li>
             ))}
           </ul>
         </div>
       </div>
-
     </section>
   );
 }

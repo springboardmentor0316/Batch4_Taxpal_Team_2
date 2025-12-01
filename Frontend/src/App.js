@@ -6,6 +6,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import './styles/App.css';
 import './styles/Sidebar.css';
 import './styles/Dashboard.css';
+import './styles/Settings.css';
+import './styles/Budget.css';
+import './styles/TaxEstimator.css';
+import './styles/TaxCalendar.css';
+import './styles/Transaction.css';
+
 
 // Import components
 import Register from "./pages/Register";
@@ -18,6 +24,10 @@ import Setting from "./pages/settings";
 import Budget from "./pages/Budget";
 import Sidebar from "./pages/Sidebar";
 import Home from "./pages/Home";
+import Transaction from "./pages/transaction";
+import TaxEstimator from "./pages/TaxEstimator";
+import TaxCalendar from "./pages/TaxCalendar";
+import Reports from "./pages/Reports";
 
 
 // Protected Route Component
@@ -75,7 +85,30 @@ function App() {
             <Budget />
           </ProtectedRoute>
         } />
+        <Route path="/TaxEstimator" element={
+          <ProtectedRoute>
+          <TaxEstimator />
+        </ProtectedRoute>
+      } />
+        <Route path="/TaxCalendar" element={
+          <ProtectedRoute>
+          <TaxCalendar />
+        </ProtectedRoute>
+      } />
 
+       <Route path="/transaction" element={
+          <ProtectedRoute>
+          <Transaction />
+        </ProtectedRoute>
+      } />
+         <Route path="/Reports" element={
+          <ProtectedRoute>
+          <Reports />
+        </ProtectedRoute>
+      } />
+
+      
+        
         {/* Catch all route */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
