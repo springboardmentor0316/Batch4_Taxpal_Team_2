@@ -289,17 +289,113 @@
   background-color: #e2e8f0;
 }
 
+/* subtle hover for cards */
 .card:hover {
   background-color: inherit; 
   box-shadow: 0 4px 15px rgba(0,0,0,0.08); 
   transform: none; 
 }
 
+/* override active style so list item is visible */
 .recent-item.active {
   background-color: #fff; 
   border-color: #e2e8f0;
 }
 
+/* ---------- Print-specific classes (used in print popup and @media print) ---------- */
+
+/* A neat header used by the print popup and printable area */
+.print-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.print-title {
+  font-size: 24px;
+  color: #1e3a8a;
+  font-weight: 700;
+  margin: 0;
+}
+
+.print-meta {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* summary box used by print and can be used by backend PDF structure (visually consistent) */
+.summary-box {
+  border: 1px solid #e6eef6;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+  padding: 18px;
+  border-radius: 10px;
+  margin: 18px 0;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 15px;
+  align-items: center;
+}
+
+.summary-row .label {
+  color: #475569;
+  font-weight: 600;
+}
+
+.summary-row .value {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+/* Net income emphasized */
+.net-positive {
+  color: #059669;
+}
+.net-negative {
+  color: #dc2626;
+}
+
+/* nicely formatted footer for printed pages */
+.print-footer {
+  text-align: center;
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 30px;
+}
+
+/* table styles for transaction table if you add one to print or PDF HTML */
+.print-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  font-size: 13px;
+}
+.print-table th, .print-table td {
+  border: 1px solid #e6eef6;
+  padding: 8px 10px;
+  text-align: left;
+}
+.print-table th {
+  background: #f8fafc;
+  font-weight: 600;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+  .reports-content {
+    flex-direction: column;
+  }
+  .left-column {
+    max-width: 100%;
+  }
+}
+
+/* Print media overrides */
 @media print {
   .dashboard-container,
   .reports-container {
@@ -325,17 +421,28 @@
     width: 100% !important;
   }
 
+  /* force dark text for printing */
   body, .reports-container, .dashboard-container {
     font-size: 12pt;
     color: #000;
   }
+
+  /* Make print headings stand out */
+  .print-title {
+    color: #000 !important;
+  }
+
+  .summary-box {
+    border: 1px solid #d1d5db !important;
+    background: #fff !important;
+  }
+
+  /* ensure footer always printed at bottom */
+  .print-footer {
+    position: fixed;
+    bottom: 12px;
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
 }
-
-
-
-
-
-
-
-
-
