@@ -12,6 +12,7 @@ import budgetRoutes from "./routes/budgetRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import taxEstimatorRoutes from "./routes/taxestimatorroutes.js";
 import taxCalendarRoutes from "./routes/taxcalendarroutes.js";
+import reportsRoutes from "./routes/reportsRoutes.js";
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use("/api/budgets", budgetRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/tax", taxEstimatorRoutes);
 app.use("/api/taxPayment", taxCalendarRoutes);
+app.use("/api/reports", reportsRoutes);
 
 app.get("/", (req, res) => res.json({ ok: true, message: "TaxPal API is running" }));
 
