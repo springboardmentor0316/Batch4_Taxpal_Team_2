@@ -1,0 +1,448 @@
+.reports-container {
+  padding: 30px;
+  background-color: #f8fafc;
+  font-family: "Inter", sans-serif;
+  margin-left: 270px;
+  color: #1e293b;
+}
+
+.reports-header h2 {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.reports-header p {
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.reports-content {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 460px;
+  width: 100%;
+}
+
+.generate-report {
+  display: flex;
+  flex-direction: column;
+}
+
+.generate-report h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.generate-report label {
+  font-weight: 600;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  font-size: 0.875rem;
+  display: block;
+}
+
+.generate-report select {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  font-size: 0.9rem;
+  outline: none;
+  background-color: #f8fafc;
+  width: 100%;
+}
+
+.generate-report select:focus {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1);
+}
+
+.button-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.generate-btn,
+.reset-btn {
+  flex: 1;               /* Both buttons same width */
+  padding: 12px 0;       /* Same height */
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.generate-btn {
+  background-color: #0284c7;
+  color: #fff;
+  border: none;
+}
+
+.generate-btn:hover {
+  background-color: #0369a1;
+}
+
+.reset-btn {
+  background-color: #ffffff;
+  color: #0284c7;
+  border: 1px solid #0284c7;
+}
+
+.reset-btn:hover {
+  background-color: #f0f9ff;
+  color: #0369a1;
+  border-color: #0369a1;
+}
+
+/* Recent Reports */
+.recent-reports {
+  padding: 24px;
+}
+
+.recent-reports h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.preview-placeholder {
+  color: #94a3b8;
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.file-icon {
+  font-size: 64px;
+  display: block;
+  margin-bottom: 16px;
+  opacity: 0.3;
+}
+
+.preview-placeholder p {
+  font-weight: 500;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  color: #64748b;
+}
+
+.preview-placeholder small {
+  font-size: 0.875rem;
+  color: #94a3b8;
+}
+
+.recent-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recent-item {
+  padding: 14px 16px;
+  background-color: #fff;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.recent-item.active {
+  border-color: #0284c7;
+  background-color: #f0f9ff;
+}
+
+.recent-item:hover {
+  background-color: #f8fafc;
+}
+
+.recent-title {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #1e293b;
+}
+
+.recent-item small {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+/* Right side report preview */
+.report-preview {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.report-preview h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.report-details {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.report-details h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.report-meta {
+  color: #64748b;
+  font-size: 0.875rem;
+  margin-bottom: 16px;
+}
+
+.report-meta hr {
+  margin-top: 16px;
+  border: none;
+  border-top: 1px solid #e2e8f0;
+}
+
+.report-summary {
+  background-color: #f9fafb;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.report-summary p {
+  margin: 12px 0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+}
+
+.report-summary hr {
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  margin: 16px 0;
+}
+
+.green {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.red {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.blue {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.report-footer h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.report-footer p {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.report-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.report-actions button {
+  background-color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #475569;
+}
+
+.report-actions button:hover {
+  background-color: #e2e8f0;
+}
+
+/* subtle hover for cards */
+.card:hover {
+  background-color: inherit; 
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08); 
+  transform: none; 
+}
+
+/* override active style so list item is visible */
+.recent-item.active {
+  background-color: #fff; 
+  border-color: #e2e8f0;
+}
+
+/* ---------- Print-specific classes (used in print popup and @media print) ---------- */
+
+/* A neat header used by the print popup and printable area */
+.print-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.print-title {
+  font-size: 24px;
+  color: #1e3a8a;
+  font-weight: 700;
+  margin: 0;
+}
+
+.print-meta {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* summary box used by print and can be used by backend PDF structure (visually consistent) */
+.summary-box {
+  border: 1px solid #e6eef6;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+  padding: 18px;
+  border-radius: 10px;
+  margin: 18px 0;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 15px;
+  align-items: center;
+}
+
+.summary-row .label {
+  color: #475569;
+  font-weight: 600;
+}
+
+.summary-row .value {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+/* Net income emphasized */
+.net-positive {
+  color: #059669;
+}
+.net-negative {
+  color: #dc2626;
+}
+
+/* nicely formatted footer for printed pages */
+.print-footer {
+  text-align: center;
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 30px;
+}
+
+/* table styles for transaction table if you add one to print or PDF HTML */
+.print-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  font-size: 13px;
+}
+.print-table th, .print-table td {
+  border: 1px solid #e6eef6;
+  padding: 8px 10px;
+  text-align: left;
+}
+.print-table th {
+  background: #f8fafc;
+  font-weight: 600;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+  .reports-content {
+    flex-direction: column;
+  }
+  .left-column {
+    max-width: 100%;
+  }
+}
+
+/* Print media overrides */
+@media print {
+  .dashboard-container,
+  .reports-container {
+    margin-left: 0 !important; 
+    width: 100% !important;
+    padding: 20px !important;
+    box-shadow: none !important;
+  }
+
+  .sidebar,
+  .header-actions,
+  .btn {
+    display: none !important;
+  }
+
+  .card,
+  .report-preview,
+  .generate-report,
+  .recent-reports {
+    box-shadow: none !important;
+    border: none !important;
+    background-color: #fff !important;
+    width: 100% !important;
+  }
+
+  /* force dark text for printing */
+  body, .reports-container, .dashboard-container {
+    font-size: 12pt;
+    color: #000;
+  }
+
+  /* Make print headings stand out */
+  .print-title {
+    color: #000 !important;
+  }
+
+  .summary-box {
+    border: 1px solid #d1d5db !important;
+    background: #fff !important;
+  }
+
+  /* ensure footer always printed at bottom */
+  .print-footer {
+    position: fixed;
+    bottom: 12px;
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
+}

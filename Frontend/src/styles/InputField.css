@@ -1,0 +1,43 @@
+.input-with-icon {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-icon input,
+.input-with-icon select {
+  width: 100%;
+  padding: 12px 42px !important; 
+  border-radius: 8px;
+  border: 1px solid #d0d0d0;
+  background-color: #eef0f2;
+  font-size: 14px;
+  color: #333;
+  transition: 0.3s;
+}
+
+.input-icon,
+.toggle-icon {
+  position: absolute;
+  color: #777;
+}
+
+.input-icon {
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.toggle-icon {
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.input-icon svg,
+.toggle-icon svg {
+  width: 20px;
+  height: 20px;
+}

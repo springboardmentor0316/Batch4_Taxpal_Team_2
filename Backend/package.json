@@ -1,0 +1,31 @@
+{
+  "name": "m1-backend",
+  "version": "0.1.0",
+  "private": true,
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^5.0.0",
+    "mongoose": "^8.20.1",
+    "morgan": "^1.10.1",
+    "nodemailer": "^6.9.13",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "description": "Backend for TaxPal",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

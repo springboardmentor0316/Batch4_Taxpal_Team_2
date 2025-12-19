@@ -1,0 +1,188 @@
+/* ================================================= */
+/* Transaction.css */
+/* ================================================= */
+
+:root {
+  --sidebar-width: 260px;   /* <-- Sidebar width (same as Dashboard.css) */
+}
+
+/* ================================================= */
+/* FULL PAGE TRANSACTIONS PAGE */
+/* ================================================= */
+
+.transactions {
+  margin-left: var(--sidebar-width);  /* SIDEBAR OFFSET */
+  padding: 32px;
+  min-height: 100vh;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  color: var(--text-dark);
+  box-sizing: border-box;
+  transition: margin-left 0.3s ease;
+  background: #f5f7fa;
+}
+
+/* For mobile screens (sidebar collapses) */
+@media (max-width: 992px) {
+  .transactions {
+    margin-left: 0;
+  }
+}
+
+/* ================================================= */
+/* TRANSACTION CONTAINER */
+/* ================================================= */
+
+.transactions-container {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+  margin-top: 24px;
+}
+
+/* =============================== */
+/* 🔥 IMPORTANT FIX */
+/* Dashboard preview should have *NO* sidebar margin */
+/* =============================== */
+
+.transactions-dashboard-preview .transactions-container {
+  margin-left: 0 !important;
+}
+
+/* When Transactions is opened inside Dashboard (View All) */
+.transactions-inside-dashboard {
+  margin-left: 0 !important;   /* no sidebar margin */
+  padding: 0 !important;
+}
+
+
+
+/* ================================================= */
+/* HEADER */
+/* ================================================= */
+
+.transactions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.transactions-header h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.view-all-link {
+  color: #3b82f6;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.view-all-link:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+/* ================================================= */
+/* TABLE */
+/* ================================================= */
+
+.transactions-table {
+  overflow-x: auto;
+}
+
+.transactions-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.transactions-table thead {
+  background-color: #f9fafb;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.transactions-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 16px;
+  font-weight: bold;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.transactions-table tbody tr {
+  border-bottom: 1px solid #e5e7eb;
+  transition: background-color 0.2s ease;
+}
+
+.transactions-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.transactions-table td {
+  font-size: 14px;
+  color: #374151;
+  font-weight: 600;
+}
+
+/* ================================================= */
+/* AMOUNT COLORS */
+/* ================================================= */
+
+.amount-positive {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.amount-negative {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+/* ================================================= */
+/* TYPE BADGES */
+/* ================================================= */
+
+.type-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.badge-income {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.badge-expense {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+
+/* ================================================= */
+/* RESPONSIVE */
+/* ================================================= */
+
+@media (max-width: 768px) {
+  .transactions-container {
+    padding: 16px;
+  }
+
+  .transactions-table table {
+    min-width: 600px;
+  }
+
+  .view-all-link {
+    font-size: 13px;
+  }
+}

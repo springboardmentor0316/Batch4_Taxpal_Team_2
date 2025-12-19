@@ -1,0 +1,164 @@
+/* =============================================== */
+/* App.css — Vibrant Blue Dashboard UI */
+/* =============================================== */
+
+:root {
+  --sidebar-width: 250px;
+  --primary-color: #007bff;
+  --primary-hover: #005fcc;
+  --light-bg: #f8faff;
+  --card-bg: #ffffff;
+  --text-dark: #111827;
+  --text-muted: #6b7280;
+  --border: #e5e7eb;
+  --radius: 14px;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ================================================= */
+/* Layout */
+/* ================================================= */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  background: var(--light-bg);
+  font-family: 'Poppins', sans-serif;
+}
+
+.main-content {
+  flex: 1;
+  padding: 32px;
+  background: var(--light-bg);
+  margin-left: var(--sidebar-width);
+  transition: margin 0.3s ease;
+}
+
+/* ================================================= */
+/* Header */
+/* ================================================= */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.dashboard-header h2 {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.header-actions button {
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: all 0.25s ease;
+}
+
+.header-actions .income-btn {
+  background-color: #16a34a;
+  color: white;
+}
+
+.header-actions .income-btn:hover {
+  background-color: #15803d;
+  transform: translateY(-1px);
+}
+
+.header-actions .expense-btn {
+  background-color: #ef4444;
+  color: white;
+}
+
+.header-actions .expense-btn:hover {
+  background-color: #dc2626;
+  transform: translateY(-1px);
+}
+
+/* ================================================= */
+/* Summary Cards */
+/* ================================================= */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  margin-bottom: 30px;
+}
+
+.dashboard-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+}
+
+.dashboard-card h3 {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.dashboard-card .value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.dashboard-card .trend {
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+.trend-up {
+  color: #16a34a;
+}
+
+.trend-down {
+  color: #ef4444;
+}
+
+/* ================================================= */
+/* Charts / Tables */
+/* ================================================= */
+.chart-container,
+.data-container {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text-dark);
+}
+
+/* ================================================= */
+/* Sidebar Responsive */
+/* ================================================= */
+@media (max-width: 992px) {
+  .main-content {
+    margin-left: 0;
+    padding: 20px;
+  }
+}
